@@ -8,6 +8,7 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.RegularMove;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Knight extends Piece {
     public Knight(PieceColor color) {
@@ -16,16 +17,12 @@ public class Knight extends Piece {
 
     @Override
     public List<Move> getMoves(Board board, Position from) {
-        List<Move> moves = new ArrayList<>();
-
         List<Position> possibleToPositions = getPossibleToPositions(from);
         List<Position> filteredToPositions = getFilteredToPositions(board, possibleToPositions);
 
-        for (Position to : filteredToPositions) {
-            moves.add(new RegularMove(from, to));
-        }
-
-        return moves;
+        return filteredToPositions.stream()
+            .map(to -> new RegularMove(from, to))
+            .collect(Collectors.toList());
     }
 
     private List<Position> getPossibleToPositions(Position from) {
