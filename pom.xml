@@ -84,5 +84,13 @@
         </executions>
       </plugin>
     </plugins>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/resources/img</directory>
+      </resource>
+    </resources>
   </build>
 </project>

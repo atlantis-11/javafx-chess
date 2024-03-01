@@ -1,0 +1,45 @@
+package ua.edu.sumdu.chess.javafxchess;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import ua.edu.sumdu.chess.javafxchess.backend.Game;
+
+import java.io.IOException;
+import java.util.Objects;
+
+
+public class ChessApplication extends Application {
+    private static ChessController controller;
+
+    @Override
+    public void start(Stage primaryStage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("chess.fxml"));
+        Parent root = loader.load();
+        controller = loader.getController();
+
+        primaryStage.setTitle("JavaFX Application");
+        Scene scene = new Scene(root, 800, 600);
+        String css = Objects.requireNonNull(getClass().getResource("/circle.css")).toExternalForm();
+        scene.getStylesheets().add(css);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        Game game = new Game();
+        game.onMoveMade(e -> controller.drawBoard(e.getBoard()));
+
+        game.start();
+
+        controller.setGame(game);
+        controller.drawBoard(game.getBoard());
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+
+
+

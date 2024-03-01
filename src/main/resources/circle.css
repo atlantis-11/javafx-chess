@@ -1,0 +1,13 @@
+.LM {
+    -fx-fill: transparent;
+    -fx-stroke: rgba(105, 105, 105, 0.5);
+    -fx-stroke-width: 3px;
+    -fx-scale-x: 1.8;
+    -fx-scale-y: 1.8;
+}
+
+.LM-2{
+    -fx-fill: rgba(105, 105, 105, 0.5);
+    -fx-scale-x: 0.8;
+    -fx-scale-y: 0.8;
+}
