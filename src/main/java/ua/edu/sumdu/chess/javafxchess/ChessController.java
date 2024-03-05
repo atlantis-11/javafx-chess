@@ -1,6 +1,5 @@
 package ua.edu.sumdu.chess.javafxchess;
 
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -42,40 +41,37 @@ public class ChessController {
         int col = (int) (event.getX() / (gridPane.getWidth() / 8));
         Position pos = new Position(row, col);
 
-        if (game.getLegalMoves(pos) != null)
 
-            if (selectedPos == null) {
-                List<Move> legalMoves = game.getLegalMoves(pos);
+        if (selectedPos == null) {
+            List<Move> legalMoves = game.getLegalMoves(pos);
 
-                if (!legalMoves.isEmpty()) {
-                    selectedPos = pos;
+            if (!legalMoves.isEmpty()) {
+                selectedPos = pos;
 
-                    for (Move move : legalMoves) {
-                        int rowLM = move.getTo().row();
-                        int colLM = move.getTo().col();
-                        Circle circle = new Circle();
-                        StackPane stackPane = cellStackPanes[rowLM][colLM];
+                for (Move move : legalMoves) {
+                    int rowLM = move.getTo().row();
+                    int colLM = move.getTo().col();
+                    Circle circle = new Circle();
+                    StackPane stackPane = cellStackPanes[rowLM][colLM];
 
-                        if (((stackPane.getChildren().size() > 1) &&
-                                !(stackPane.getChildren().get(1) instanceof Rectangle)||
-                                stackPane.getChildren().size() > 2)){
-                            circle.getStyleClass().add("LM");
-                        } else {
-                            circle.getStyleClass().add("LM-2");
-                        }
-
-                        cellStackPanes[rowLM][colLM].getChildren().add(circle);
+                    if (((stackPane.getChildren().size() > 1) && !(stackPane.getChildren().get(1) instanceof Rectangle)|| stackPane.getChildren().size() > 2)){
+                        circle.getStyleClass().add("LM");
+                    } else {
+                        circle.getStyleClass().add("LM-2");
                     }
 
-                    Platform.runLater(() -> adjustSquareSize(pane.getWidth(), pane.getHeight()));
+                    cellStackPanes[rowLM][colLM].getChildren().add(circle);
                 }
-            } else {
-                PieceType pieceType = tryParsePieceType("\n");
 
-                game.makeMove(selectedPos, pos, pieceType);
-
-                selectedPos = null;
+                Platform.runLater(() -> adjustSquareSize(pane.getWidth(), pane.getHeight()));
             }
+        } else {
+            PieceType pieceType = tryParsePieceType("\n");
+
+            game.makeMove(selectedPos, pos, pieceType);
+
+            selectedPos = null;
+        }
 
     }
 
@@ -151,12 +147,13 @@ public class ChessController {
                 }
 
                 if (piece != null) {
-                    ImageView wp = new ImageView();
+                    ImageView pieceView = new ImageView();
+                    cellStackPane.getChildren().add(pieceView);
 
                     Platform.runLater(() -> adjustSquareSize(pane.getWidth(), pane.getHeight()));
 
-                    wp.setImage(new Image(getImagePath(piece)));
-                    cellStackPane.getChildren().add(wp);
+                    pieceView.setImage(new Image(getImagePath(piece)));
+
                 }
 
             }

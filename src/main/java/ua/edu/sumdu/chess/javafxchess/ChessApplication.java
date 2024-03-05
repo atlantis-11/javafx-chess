@@ -30,6 +30,7 @@ public class ChessApplication extends Application {
         Game game = new Game();
         game.onMoveMade(e -> controller.drawBoard(e.getBoard()));
 
+        setupGameEventsHandlers(game);
         game.start();
 
         controller.setGame(game);
@@ -38,6 +39,22 @@ public class ChessApplication extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+    public static void setupGameEventsHandlers(Game game) {
+//        game.onTimeUpdated(e -> {
+//            System.out.println(e.getCurrentColor().toString() + ": " + e.getTimeLeft());
+//        });
+
+//        game.onWin(e -> {
+//            System.out.println("Winner: " + e.getWinner().toString()
+//                    + ", reason: " + e.getReason().toString());
+//            System.exit(0);
+//        });
+//
+//        game.onDraw(e -> {
+//            System.out.println("Draw" + ", reason: " + e.getReason().toString());
+//            System.exit(0);
+//        });
     }
 }
 
