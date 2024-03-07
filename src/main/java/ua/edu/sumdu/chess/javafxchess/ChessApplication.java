@@ -12,29 +12,29 @@ import java.util.Objects;
 
 
 public class ChessApplication extends Application {
-    private static ChessController controller;
+    private static ChessBoardController controller;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("chess.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("chessBoard.fxml"));
         Parent root = loader.load();
         controller = loader.getController();
 
         primaryStage.setTitle("JavaFX Application");
         Scene scene = new Scene(root, 800, 600);
-        String css = Objects.requireNonNull(getClass().getResource("/circle.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource("/legalMoves.css")).toExternalForm();
         scene.getStylesheets().add(css);
         primaryStage.setScene(scene);
         primaryStage.show();
 
         Game game = new Game();
-        game.onMoveMade(e -> controller.drawBoard(e.getBoard()));
+        game.onMoveMade(e -> controller.drawBoard());
 
         setupGameEventsHandlers(game);
         game.start();
 
         controller.setGame(game);
-        controller.drawBoard(game.getBoard());
+        controller.drawBoard();
     }
 
     public static void main(String[] args) {

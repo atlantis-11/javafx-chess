@@ -23,22 +23,25 @@ import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceType;
 
 import java.util.List;
 
-public class ChessController {
+public class ChessBoardController {
     @FXML
-    private GridPane gridPane;
+    private GridPane boardGridPane;
     @FXML
-    private AnchorPane pane;
-    private StackPane[][] cellStackPanes;
+    private AnchorPane boardPane;
+    private StackPane[][] squareStackPanes;
     private Position selectedPos;
 
     @Getter
     @Setter
     private Game game;
+    private Color blackSquare = Color.rgb(119, 153, 84);
+    private Color whiteSquare = Color.rgb(233, 237, 204);
+    private Color stepColor = Color.rgb(244, 244, 128, 0.5);
 
     @FXML
-    void click(MouseEvent event) {
-        int row = (int) (event.getY() / (gridPane.getHeight() / 8));
-        int col = (int) (event.getX() / (gridPane.getWidth() / 8));
+    void moveClick(MouseEvent event) {
+        int row = (int) (event.getY() / (boardGridPane.getHeight() / 8));
+        int col = (int) (event.getX() / (boardGridPane.getWidth() / 8));
         Position pos = new Position(row, col);
 
 
@@ -52,18 +55,20 @@ public class ChessController {
                     int rowLM = move.getTo().row();
                     int colLM = move.getTo().col();
                     Circle circle = new Circle();
-                    StackPane stackPane = cellStackPanes[rowLM][colLM];
+                    StackPane stackPane = squareStackPanes[rowLM][colLM];
 
-                    if (((stackPane.getChildren().size() > 1) && !(stackPane.getChildren().get(1) instanceof Rectangle)|| stackPane.getChildren().size() > 2)){
-                        circle.getStyleClass().add("LM");
+                    if (((stackPane.getChildren().size() > 1) &&
+                            !(stackPane.getChildren().get(1) instanceof Rectangle)||
+                            stackPane.getChildren().size() > 2)){
+                        circle.getStyleClass().add("legalMoveWithCapture");
                     } else {
-                        circle.getStyleClass().add("LM-2");
+                        circle.getStyleClass().add("legalMove");
                     }
 
-                    cellStackPanes[rowLM][colLM].getChildren().add(circle);
+                    squareStackPanes[rowLM][colLM].getChildren().add(circle);
                 }
 
-                Platform.runLater(() -> adjustSquareSize(pane.getWidth(), pane.getHeight()));
+                Platform.runLater(() -> adjustSquareSize(boardPane.getWidth(), boardPane.getHeight()));
             }
         } else {
             PieceType pieceType = tryParsePieceType("\n");
@@ -85,43 +90,40 @@ public class ChessController {
 
     @FXML
     void initialize() {
-        Color blackCell = Color.rgb(119, 153, 84);
-        Color whiteCell = Color.rgb(233, 237, 204);
-
-        cellStackPanes = new StackPane[8][8];
+        squareStackPanes = new StackPane[8][8];
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                StackPane cellStackPane = new StackPane();
-                cellStackPanes[row][col] = cellStackPane;
-                gridPane.add(cellStackPane, col, row);
+                StackPane squareStackPane = new StackPane();
+                squareStackPanes[row][col] = squareStackPane;
+                boardGridPane.add(squareStackPane, col, row);
 
                 Rectangle rectangle = new Rectangle();
-                rectangle.setFill((row + col) % 2 == 0 ? whiteCell : blackCell);
+                rectangle.setFill((row + col) % 2 == 0 ? whiteSquare : blackSquare);
 
-                cellStackPane.getChildren().add(rectangle);
+                squareStackPane.getChildren().add(rectangle);
             }
         }
 
-        pane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
-            double height = pane.getHeight();
+        boardPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
+            double height = boardPane.getHeight();
             if (newWidth.doubleValue() / height > 1) {
                 adjustSquareSize(newWidth.doubleValue(), height);
             }
         });
 
-        pane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
-            double width = pane.getWidth();
+        boardPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
+            double width = boardPane.getWidth();
             if (newHeight.doubleValue() / width > 1) {
                 adjustSquareSize(width, newHeight.doubleValue());
             }
         });
 
-        Platform.runLater(() -> adjustSquareSize(pane.getWidth(), pane.getHeight()));
+        Platform.runLater(() -> adjustSquareSize(boardPane.getWidth(), boardPane.getHeight()));
     }
 
-    public void drawBoard(Board board) {
-        Color stepColor = Color.rgb(244, 244, 128, 0.5);
+    public void drawBoard() {
         Position from = null, to = null;
+        Board board = game.getBoard();
         if (board.getLastMove() != null) {
             from = board.getLastMove().getFrom();
             to = board.getLastMove().getTo();
@@ -129,28 +131,28 @@ public class ChessController {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                StackPane cellStackPane = cellStackPanes[i][j];
+                StackPane squareStackPane = squareStackPanes[i][j];
                 Position position = new Position(i, j);
                 Piece piece = board.getPiece(position);
 
-                int cellSize = cellStackPane.getChildren().size();
-                if (cellSize > 1) {
-                    cellStackPane.getChildren().remove(1, cellStackPane.getChildren().size());
+                int squareSize = squareStackPane.getChildren().size();
+                if (squareSize > 1) {
+                    squareStackPane.getChildren().remove(1, squareStackPane.getChildren().size());
                 }
 
                 if ((position.equals(from)) || (position.equals(to))) {
-                    StackPane cellStackPanelLM = cellStackPanes[i][j];
+                    StackPane squareStackPanelLM = squareStackPanes[i][j];
                     Rectangle rectangleLM = new Rectangle();
                     rectangleLM.setFill(stepColor);
 
-                    cellStackPanelLM.getChildren().add(rectangleLM);
+                    squareStackPanelLM.getChildren().add(rectangleLM);
                 }
 
                 if (piece != null) {
                     ImageView pieceView = new ImageView();
-                    cellStackPane.getChildren().add(pieceView);
+                    squareStackPane.getChildren().add(pieceView);
 
-                    Platform.runLater(() -> adjustSquareSize(pane.getWidth(), pane.getHeight()));
+                    Platform.runLater(() -> adjustSquareSize(boardPane.getWidth(), boardPane.getHeight()));
 
                     pieceView.setImage(new Image(getImagePath(piece)));
 
@@ -174,18 +176,18 @@ public class ChessController {
 
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                StackPane cellStackPane = cellStackPanes[row][col];
-                cellStackPane.setPrefSize(squareSize, squareSize);
+                StackPane squareStackPane = squareStackPanes[row][col];
+                squareStackPane.setPrefSize(squareSize, squareSize);
 
-                int size = cellStackPane.getChildren().size();
+                int squareStackSize = squareStackPane.getChildren().size();
 
-                for (int i = 0; i < size; i++) {
-                    if (cellStackPane.getChildren().get(i) instanceof Rectangle rectangleLM) {
+                for (int i = 0; i < squareStackSize; i++) {
+                    if (squareStackPane.getChildren().get(i) instanceof Rectangle rectangleLM) {
                         rectangleLM.setWidth(squareSize);
                         rectangleLM.setHeight(squareSize);
-                    } else if (cellStackPane.getChildren().get(i) instanceof Circle circleLP) {
+                    } else if (squareStackPane.getChildren().get(i) instanceof Circle circleLP) {
                         circleLP.setRadius(squareSize / 4);
-                    } else if (cellStackPane.getChildren().get(i) instanceof ImageView imgPiece) {
+                    } else if (squareStackPane.getChildren().get(i) instanceof ImageView imgPiece) {
                         imgPiece.setFitWidth(squareSize);
                         imgPiece.setFitHeight(squareSize);
                     }
