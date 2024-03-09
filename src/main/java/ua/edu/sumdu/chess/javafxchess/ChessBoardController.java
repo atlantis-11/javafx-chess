@@ -19,7 +19,6 @@ import ua.edu.sumdu.chess.javafxchess.backend.Position;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.Piece;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
-import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceType;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class ChessBoardController {
     private Game game;
     private final Color blackSquare = Color.rgb(119, 153, 84);
     private final Color whiteSquare = Color.rgb(233, 237, 204);
-    private final Color stepColor = Color.rgb(244, 244, 128, 0.5);
+    private final Color highlightedSquareColor = Color.rgb(255, 255, 51, 0.5);
 
     @FXML
     void initialize() {
@@ -113,7 +112,7 @@ public class ChessBoardController {
                                    Position to) {
         if ((position.equals(from)) || (position.equals(to))) {
             Rectangle rectangleLastMove = new Rectangle();
-            rectangleLastMove.setFill(stepColor);
+            rectangleLastMove.setFill(highlightedSquareColor);
 
             squareStackPane.getChildren().add(rectangleLastMove);
         }
