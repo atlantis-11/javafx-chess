@@ -208,7 +208,7 @@ public class Game {
     }
 
     private void emitMoveMadeEvent() {
-        moveMadeEventEmitter.trigger(new MoveMadeEvent(board, currentPlayer.getPieceColor()));
+        moveMadeEventEmitter.trigger(new MoveMadeEvent(currentPlayer.getPieceColor()));
     }
 
     private void emitTimeUpdatedEvent() {
