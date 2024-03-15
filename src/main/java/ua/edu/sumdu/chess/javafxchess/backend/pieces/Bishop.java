@@ -8,11 +8,11 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import java.util.List;
 
 public class Bishop extends Piece {
-    private static final Direction[] dirs = {
-        Direction.NorthEast,
-        Direction.SouthEast,
-        Direction.SouthWest,
-        Direction.NorthWest
+    private static final Direction[] DIRS = {
+        Direction.NORTH_EAST,
+        Direction.SOUTH_EAST,
+        Direction.SOUTH_WEST,
+        Direction.NORTH_WEST
     };
 
     public Bishop(PieceColor color) {
@@ -21,7 +21,7 @@ public class Bishop extends Piece {
 
     @Override
     public List<Move> getMoves(Board board, Position from) {
-        return getMovesInDirs(board, from, dirs);
+        return getMovesInDirs(board, from, DIRS);
     }
 
     @Override

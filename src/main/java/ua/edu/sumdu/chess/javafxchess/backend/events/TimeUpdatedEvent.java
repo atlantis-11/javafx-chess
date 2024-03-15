@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class TimeUpdatedEvent {
-    int timeLeft;
-    PieceColor currentColor;
+    private final int timeLeft;
+    private final PieceColor currentColor;
 
     public TimeUpdatedEvent(int timeLeft, PieceColor currentColor) {
         this.timeLeft = timeLeft;

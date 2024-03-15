@@ -28,8 +28,8 @@ public class Knight extends Piece {
     private List<Position> getPossibleToPositions(Position from) {
         List<Position> toPositions = new ArrayList<>();
 
-        for (Direction hDir : Direction.HorizontalDirs) {
-            for (Direction vDir : Direction.VerticalDirs) {
+        for (Direction hDir : Direction.HORIZONTAL_DIRS) {
+            for (Direction vDir : Direction.VERTICAL_DIRS) {
                 toPositions.add(from.add(hDir).add(hDir).add(vDir));
                 toPositions.add(from.add(vDir).add(vDir).add(hDir));
             }

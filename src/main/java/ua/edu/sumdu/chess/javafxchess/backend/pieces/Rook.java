@@ -8,11 +8,11 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import java.util.List;
 
 public class Rook extends Piece {
-    private static final Direction[] dirs = {
-        Direction.North,
-        Direction.East,
-        Direction.South,
-        Direction.West
+    private static final Direction[] DIRS = {
+        Direction.NORTH,
+        Direction.EAST,
+        Direction.SOUTH,
+        Direction.WEST
     };
 
     public Rook(PieceColor color) {
@@ -21,7 +21,7 @@ public class Rook extends Piece {
 
     @Override
     public List<Move> getMoves(Board board, Position from) {
-        return getMovesInDirs(board, from, dirs);
+        return getMovesInDirs(board, from, DIRS);
     }
 
     @Override

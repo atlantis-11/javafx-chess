@@ -18,7 +18,7 @@ public class Board {
     @Getter @Setter
     private int fullmoveCounter = 1;
     @Getter
-    private final List<String> FENHistory = new ArrayList<>();
+    private final List<String> repetitionFENHistory = new ArrayList<>();
 
     public Piece getPiece(Position pos) {
         if (isOnBoard(pos)) {
@@ -128,7 +128,7 @@ public class Board {
             }
         }
 
-        FENHistory.add(getFENWithoutCounters());
+        repetitionFENHistory.add(getFENWithoutCounters());
     }
 
     public String getFEN() {

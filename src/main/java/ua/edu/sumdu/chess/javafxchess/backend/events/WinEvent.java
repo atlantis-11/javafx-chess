@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class WinEvent {
-    WinReason reason;
-    PieceColor winner;
+    private final WinReason reason;
+    private final PieceColor winner;
 
     public WinEvent(WinReason reason, PieceColor winner) {
         this.reason = reason;

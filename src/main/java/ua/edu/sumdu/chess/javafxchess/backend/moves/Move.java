@@ -36,9 +36,9 @@ public abstract class Move {
         if (!(this instanceof RegularMove) ||
             board.getPiece(to).getType() == PieceType.PAWN) {
 
-            board.getFENHistory().clear();
+            board.getRepetitionFENHistory().clear();
         } else {
-            board.getFENHistory().add(board.getFENWithoutCounters());
+            board.getRepetitionFENHistory().add(board.getFENWithoutCounters());
         }
     }
 

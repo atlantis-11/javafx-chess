@@ -14,7 +14,7 @@ public class CastlingMove extends Move {
     @Override
     protected void doExecute(Board board) {
         Direction dir = getCastlingDir();
-        int rookCol = dir == Direction.East ? 7 : 0;
+        int rookCol = dir == Direction.EAST ? 7 : 0;
 
         Piece king = board.getPiece(from);
         Piece rook = board.getPiece(from.row(), rookCol);
@@ -55,7 +55,7 @@ public class CastlingMove extends Move {
 
     private Direction getCastlingDir() {
         return (to.col() - from.col()) > 0
-            ? Direction.East
-            : Direction.West;
+            ? Direction.EAST
+            : Direction.WEST;
     }
 }

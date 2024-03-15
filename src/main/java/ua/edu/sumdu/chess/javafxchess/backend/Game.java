@@ -157,9 +157,9 @@ public class Game {
     }
 
     private boolean isThreefoldRepetition() {
-        if (!board.getFENHistory().isEmpty()) {
-            String lastFEN = board.getFENHistory().getLast();
-            return board.getFENHistory()
+        if (!board.getRepetitionFENHistory().isEmpty()) {
+            String lastFEN = board.getRepetitionFENHistory().getLast();
+            return board.getRepetitionFENHistory()
                 .stream()
                 .filter(lastFEN::equals)
                 .count() == 3;

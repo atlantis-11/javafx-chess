@@ -16,15 +16,15 @@ public class Pawn extends Piece {
 
     public Pawn(PieceColor color) {
         super(color, PieceType.PAWN);
-        dir = (color == PieceColor.WHITE) ? Direction.North : Direction.South;
+        dir = (color == PieceColor.WHITE) ? Direction.NORTH : Direction.SOUTH;
     }
 
     @Override
     public List<Move> getMoves(Board board, Position from) {
         List<Move> moves = new ArrayList<>();
 
-        boolean isPreLastRow = from.row() == (dir == Direction.North ? 1 : 6);
-        boolean isEnPassantRow = from.row() == (dir == Direction.North ? 3 : 4);
+        boolean isPreLastRow = from.row() == (dir == Direction.NORTH ? 1 : 6);
+        boolean isEnPassantRow = from.row() == (dir == Direction.NORTH ? 3 : 4);
 
         if (!isPreLastRow) {
             addOneSquareMoves(board, from, moves);
@@ -52,7 +52,7 @@ public class Pawn extends Piece {
             positions.add(oneForwardPos);
         }
 
-        for (Direction hDir : Direction.HorizontalDirs) {
+        for (Direction hDir : Direction.HORIZONTAL_DIRS) {
             Position diagPos = oneForwardPos.add(hDir);
 
             if (board.getPiece(diagPos) != null &&
@@ -91,7 +91,7 @@ public class Pawn extends Piece {
     private void addEnPassantMove(Board board, Position from, List<Move> moves) {
         Position oneForwardPos = from.add(dir);
 
-        for (Direction hDir : Direction.HorizontalDirs) {
+        for (Direction hDir : Direction.HORIZONTAL_DIRS) {
             Position posToTheSide = from.add(hDir);
             Piece pieceToTheSide = board.getPiece(posToTheSide);
 

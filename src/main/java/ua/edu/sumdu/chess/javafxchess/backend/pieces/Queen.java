@@ -8,15 +8,15 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import java.util.List;
 
 public class Queen extends Piece {
-    private static final Direction[] dirs = {
-        Direction.North,
-        Direction.NorthEast,
-        Direction.East,
-        Direction.SouthEast,
-        Direction.South,
-        Direction.SouthWest,
-        Direction.West,
-        Direction.NorthWest
+    private static final Direction[] DIRS = {
+        Direction.NORTH,
+        Direction.NORTH_EAST,
+        Direction.EAST,
+        Direction.SOUTH_EAST,
+        Direction.SOUTH,
+        Direction.SOUTH_WEST,
+        Direction.WEST,
+        Direction.NORTH_WEST
     };
 
     public Queen(PieceColor color) {
@@ -25,7 +25,7 @@ public class Queen extends Piece {
 
     @Override
     public List<Move> getMoves(Board board, Position from) {
-        return getMovesInDirs(board, from, dirs);
+        return getMovesInDirs(board, from, DIRS);
     }
 
     @Override

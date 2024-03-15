@@ -4,6 +4,17 @@ import lombok.Getter;
 
 @Getter
 public class Direction {
+    public static final Direction NORTH = new Direction(-1, 0);
+    public static final Direction NORTH_EAST = new Direction(-1, 1);
+    public static final Direction EAST = new Direction(0, 1);
+    public static final Direction SOUTH_EAST = new Direction(1, 1);
+    public static final Direction SOUTH = new Direction(1, 0);
+    public static final Direction SOUTH_WEST = new Direction(1, -1);
+    public static final Direction WEST = new Direction(0, -1);
+    public static final Direction NORTH_WEST = new Direction(-1, -1);
+    public static final Direction[] HORIZONTAL_DIRS = { EAST, WEST };
+    public static final Direction[] VERTICAL_DIRS = { NORTH, SOUTH };
+
     private final int rowDelta;
     private final int colDelta;
 
@@ -11,15 +22,4 @@ public class Direction {
         this.rowDelta = rowDelta;
         this.colDelta = colDelta;
     }
-
-    public static final Direction North = new Direction(-1, 0);
-    public static final Direction NorthEast = new Direction(-1, 1);
-    public static final Direction East = new Direction(0, 1);
-    public static final Direction SouthEast = new Direction(1, 1);
-    public static final Direction South = new Direction(1, 0);
-    public static final Direction SouthWest = new Direction(1, -1);
-    public static final Direction West = new Direction(0, -1);
-    public static final Direction NorthWest = new Direction(-1, -1);
-    public static final Direction[] HorizontalDirs = { East, West };
-    public static final Direction[] VerticalDirs = { North, South };
 }

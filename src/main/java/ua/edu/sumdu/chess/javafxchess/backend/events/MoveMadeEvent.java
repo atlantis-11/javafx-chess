@@ -6,8 +6,8 @@ import lombok.Getter;
 
 @Getter
 public class MoveMadeEvent {
-    Board board;
-    PieceColor currentColor;
+    private final Board board;
+    private final PieceColor currentColor;
 
     public MoveMadeEvent(Board board, PieceColor currentColor) {
         this.board = board;

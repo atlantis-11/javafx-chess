@@ -11,15 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class King extends Piece {
-    private static final Direction[] dirs = {
-        Direction.North,
-        Direction.NorthEast,
-        Direction.East,
-        Direction.SouthEast,
-        Direction.South,
-        Direction.SouthWest,
-        Direction.West,
-        Direction.NorthWest
+    private static final Direction[] DIRS = {
+        Direction.NORTH,
+        Direction.NORTH_EAST,
+        Direction.EAST,
+        Direction.SOUTH_EAST,
+        Direction.SOUTH,
+        Direction.SOUTH_WEST,
+        Direction.WEST,
+        Direction.NORTH_WEST
     };
 
     public King(PieceColor color) {
@@ -37,7 +37,7 @@ public class King extends Piece {
     }
 
     private void addRegularMoves(Board board, Position from, List<Move> moves) {
-        for (Direction dir : dirs) {
+        for (Direction dir : DIRS) {
             Position to = from.add(dir);
 
             if (!board.isOnBoard(to)) {
@@ -56,7 +56,7 @@ public class King extends Piece {
     private void addCastlingMoves(Board board, Position from, List<Move> moves) {
         if (hasMoved) return;
 
-        for (Direction hDir : Direction.HorizontalDirs) {
+        for (Direction hDir : Direction.HORIZONTAL_DIRS) {
             if (canCastle(board, from, hDir)) {
                 Position to = from.add(hDir).add(hDir);
                 moves.add(new CastlingMove(from, to));
@@ -65,7 +65,7 @@ public class King extends Piece {
     }
 
     private boolean canCastle(Board board, Position from, Direction dir) {
-        int rookCol = dir == Direction.East ? 7 : 0;
+        int rookCol = dir == Direction.EAST ? 7 : 0;
         Position rookPos = new Position(from.row(), rookCol);
         Piece rook = board.getPiece(rookPos);
 
