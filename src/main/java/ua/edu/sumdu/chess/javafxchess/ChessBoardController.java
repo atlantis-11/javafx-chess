@@ -20,6 +20,8 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.Piece;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChessBoardController {
@@ -29,6 +31,7 @@ public class ChessBoardController {
     private AnchorPane boardPane;
     private StackPane[][] squareStackPanes;
     private Position selectedPos;
+    private List<StackPane> changedStackPanes;
 
     @Getter
     @Setter
@@ -41,8 +44,7 @@ public class ChessBoardController {
     void initialize() {
         initializeSquareStackPanes();
         addBoardListeners();
-        Platform.runLater(() -> adjustSquareSize(boardPane.getWidth(),
-                boardPane.getHeight()));
+        changedStackPanes = new ArrayList<>();
     }
 
     private void initializeSquareStackPanes() {
@@ -97,14 +99,17 @@ public class ChessBoardController {
                 Piece piece = board.getPiece(position);
 
                 if (squareStackPane.getChildren().size() > 1) {
-                    squareStackPane.getChildren().
-                            remove(1, squareStackPane.getChildren().size());
+                    squareStackPane.getChildren().remove(1, squareStackPane.getChildren().size());
                 }
 
                 highlightLastMove(squareStackPane, position, from, to);
                 drawPiece(squareStackPane, piece);
+
+                changedStackPanes.add(squareStackPane);
             }
         }
+
+        updateChangedStackPanesSize(getSquareSize(boardPane.getWidth(), boardPane.getHeight()));
     }
 
     private void highlightLastMove(StackPane squareStackPane,
@@ -123,12 +128,9 @@ public class ChessBoardController {
             ImageView pieceView = new ImageView();
             pieceView.setFitWidth(1);
             pieceView.setFitHeight(1);
-            squareStackPane.getChildren().add(pieceView);
-
-            Platform.runLater(() -> adjustSquareSize(boardPane.getWidth(),
-                    boardPane.getHeight()));
-
             pieceView.setImage(new Image(getImagePath(piece)));
+
+            squareStackPane.getChildren().add(pieceView);
         }
     }
 
@@ -169,17 +171,19 @@ public class ChessBoardController {
                 addLegalMoves(move);
             }
 
-            Platform.runLater(() -> adjustSquareSize(boardPane.getWidth(),
-                    boardPane.getHeight()));
+            updateChangedStackPanesSize(getSquareSize(boardPane.getWidth(), boardPane.getHeight()));
         }
     }
 
     private void addLegalMoves(Move move) {
         int rowLM = move.getTo().row();
         int colLM = move.getTo().col();
+        StackPane squareStackPane = squareStackPanes[rowLM][colLM];
         Circle circle = createLegalMoves(move);
 
-        squareStackPanes[rowLM][colLM].getChildren().add(circle);
+        squareStackPane.getChildren().add(circle);
+
+        changedStackPanes.add(squareStackPane);
     }
 
     private Circle createLegalMoves(Move move) {
@@ -214,32 +218,36 @@ public class ChessBoardController {
 //    }
 
     private void adjustSquareSize(double width, double height) {
-        double squareSize = 0.8 * Math.min(width, height) / 8;
+        double squareSize = getSquareSize(width, height);
 
         for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                StackPane squareStackPane = squareStackPanes[row][col];
-                squareStackPane.setPrefSize(squareSize, squareSize);
-
-                adjustChildNodeSizes(squareStackPane, squareSize);
-            }
+            changedStackPanes.addAll(Arrays.asList(squareStackPanes[row]).subList(0, 8));
         }
+
+        updateChangedStackPanesSize(squareSize);
     }
 
-    private void adjustChildNodeSizes(StackPane squareStackPane,
-                                      double squareSize) {
-        int squareStackSize = squareStackPane.getChildren().size();
+    private void updateChangedStackPanesSize(double squareSize){
+        for (StackPane changedStackPane : changedStackPanes) {
+            changedStackPane.setPrefSize(squareSize, squareSize);
+            updateChangedElementsSize(changedStackPane, squareSize);
+        }
 
-        for (int i = 0; i < squareStackSize; i++) {
-            if (squareStackPane.getChildren().get(i)
-                    instanceof Rectangle rectangleLM) {
+        changedStackPanes.clear();
+    }
+
+    private double getSquareSize(double width, double height){
+        return 0.8 * Math.min(width, height) / 8;
+    }
+
+    private void updateChangedElementsSize(StackPane squareStackPane, double squareSize){
+        for (int i = 0; i < squareStackPane.getChildren().size(); i++) {
+            if (squareStackPane.getChildren().get(i) instanceof Rectangle rectangleLM) {
                 rectangleLM.setWidth(squareSize);
                 rectangleLM.setHeight(squareSize);
-            } else if (squareStackPane.getChildren().get(i)
-                    instanceof Circle circleLP) {
+            } else if (squareStackPane.getChildren().get(i) instanceof Circle circleLP) {
                 circleLP.setRadius(squareSize / 4);
-            } else if (squareStackPane.getChildren().get(i)
-                    instanceof ImageView imgPiece) {
+            } else if (squareStackPane.getChildren().get(i) instanceof ImageView imgPiece) {
                 imgPiece.setFitWidth(squareSize);
                 imgPiece.setFitHeight(squareSize);
             }
