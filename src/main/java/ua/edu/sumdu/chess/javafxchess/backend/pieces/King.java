@@ -73,7 +73,9 @@ public class King extends Piece {
             return false;
         }
 
-        for (Position pos = from.add(dir); !pos.equals(rookPos); pos = pos.add(dir)) {
+        for (Position pos = from.add(dir);
+             !pos.equals(rookPos);
+             pos = pos.add(dir)) {
             if (board.getPiece(pos) != null) {
                 return false;
             }

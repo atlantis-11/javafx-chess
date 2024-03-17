@@ -23,9 +23,8 @@ public abstract class Move {
             board.setFullmoveCounter(board.getFullmoveCounter() + 1);
         }
 
-        if (board.getPiece(from).getType() == PieceType.PAWN ||
-            board.getPiece(to) != null) {
-
+        if (board.getPiece(from).getType() == PieceType.PAWN
+                || board.getPiece(to) != null) {
             board.setHalfmoveClock(0);
         } else {
             board.setHalfmoveClock(board.getHalfmoveClock() + 1);
@@ -33,9 +32,8 @@ public abstract class Move {
     }
 
     private void postExecute(Board board) {
-        if (!(this instanceof RegularMove) ||
-            board.getPiece(to).getType() == PieceType.PAWN) {
-
+        if (!(this instanceof RegularMove)
+                || board.getPiece(to).getType() == PieceType.PAWN) {
             board.getRepetitionFENHistory().clear();
         } else {
             board.getRepetitionFENHistory().add(board.getFENWithoutCounters());

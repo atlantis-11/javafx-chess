@@ -25,11 +25,14 @@ public abstract class Piece {
 
     public abstract List<Move> getMoves(Board board, Position from);
 
-    protected List<Move> getMovesInDirs(Board board, Position from, Direction[] dirs) {
+    protected List<Move> getMovesInDirs(Board board, Position from,
+                                        Direction[] dirs) {
         List<Move> moves = new ArrayList<>();
 
         for (Direction dir : dirs) {
-            for (Position to = from.add(dir); board.isOnBoard(to); to = to.add(dir)) {
+            for (Position to = from.add(dir);
+                 board.isOnBoard(to);
+                 to = to.add(dir)) {
                 Piece toPiece = board.getPiece(to);
 
                 if (toPiece != null) {

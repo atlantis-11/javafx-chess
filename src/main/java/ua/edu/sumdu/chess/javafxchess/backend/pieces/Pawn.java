@@ -55,9 +55,8 @@ public class Pawn extends Piece {
         for (Direction hDir : Direction.HORIZONTAL_DIRS) {
             Position diagPos = oneForwardPos.add(hDir);
 
-            if (board.getPiece(diagPos) != null &&
-                board.getPiece(diagPos).getColor() != color) {
-
+            if (board.getPiece(diagPos) != null
+                    && board.getPiece(diagPos).getColor() != color) {
                 positions.add(diagPos);
             }
         }
@@ -81,9 +80,8 @@ public class Pawn extends Piece {
         Position oneForwardPos = from.add(dir);
         Position twoForwardPos = oneForwardPos.add(dir);
 
-        if (board.getPiece(oneForwardPos) == null &&
-            board.getPiece(twoForwardPos) == null) {
-
+        if (board.getPiece(oneForwardPos) == null
+                && board.getPiece(twoForwardPos) == null) {
             moves.add(new RegularMove(from, twoForwardPos));
         }
     }
@@ -95,12 +93,11 @@ public class Pawn extends Piece {
             Position posToTheSide = from.add(hDir);
             Piece pieceToTheSide = board.getPiece(posToTheSide);
 
-            if (pieceToTheSide != null &&
-                pieceToTheSide.getType() == PieceType.PAWN &&
-                pieceToTheSide.getColor() != color &&
-                board.getLastMove().getTo().equals(posToTheSide) &&
-                getMoveRowDelta(board.getLastMove()) == 2) {
-
+            if (pieceToTheSide != null
+                    && pieceToTheSide.getType() == PieceType.PAWN
+                    && pieceToTheSide.getColor() != color
+                    && board.getLastMove().getTo().equals(posToTheSide)
+                    && getMoveRowDelta(board.getLastMove()) == 2) {
                 moves.add(new EnPassantMove(from, oneForwardPos.add(hDir)));
                 return;
             }

@@ -13,12 +13,12 @@ public class FENGenerator {
     }
 
     public String getFEN() {
-        return getPiecePlacement() + ' ' +
-            getSideToMove() + ' ' +
-            getCastlingAbility() + ' ' +
-            getEnPassantTargetSquare() + ' ' +
-            board.getHalfmoveClock() + ' ' +
-            board.getFullmoveCounter();
+        return getPiecePlacement() + ' '
+            + getSideToMove() + ' '
+            + getCastlingAbility() + ' '
+            + getEnPassantTargetSquare() + ' '
+            + board.getHalfmoveClock() + ' '
+            + board.getFullmoveCounter();
     }
 
     private String getPiecePlacement() {
@@ -65,13 +65,15 @@ public class FENGenerator {
             default -> piece.getType().name().substring(0, 1).toLowerCase();
         };
 
-        return piece.getColor() == PieceColor.WHITE ? symbol.toUpperCase() : symbol;
+        return piece.getColor() == PieceColor.WHITE
+            ? symbol.toUpperCase()
+            : symbol;
     }
 
     private char getSideToMove() {
-        if (board.getLastMove() != null &&
-            board.getPiece(board.getLastMove().getTo()).getColor() == PieceColor.WHITE) {
-            
+        if (board.getLastMove() != null
+            && board.getPiece(board.getLastMove().getTo())
+                .getColor() == PieceColor.WHITE) {
             return 'b';
         } else {
             return 'w';
@@ -121,8 +123,8 @@ public class FENGenerator {
             char file = (char) ('a' + lastMove.getTo().col());
             String rank = String.valueOf(
                 lastMove.getTo().row() - lastMove.getFrom().row() > 0
-                ? 7 - lastMove.getFrom().row()
-                : 9 - lastMove.getFrom().row()
+                    ? 7 - lastMove.getFrom().row()
+                    : 9 - lastMove.getFrom().row()
             );
 
             return file + rank;

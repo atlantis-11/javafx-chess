@@ -75,14 +75,16 @@ public class Game {
     public List<Move> getLegalMoves(Position from) {
         Piece piece = board.getPiece(from);
 
-        if (piece != null && piece.getColor() == currentPlayer.getPieceColor()) {
+        if (piece != null
+                && piece.getColor() == currentPlayer.getPieceColor()) {
             return board.getLegalMoves(from);
         }
 
         return new ArrayList<>();
     }
 
-    public void makeMove(Position from, Position to, PieceType promotionPieceType) {
+    public void makeMove(Position from, Position to,
+                         PieceType promotionPieceType) {
         Piece fromPiece = board.getPiece(from);
 
         if (fromPiece.getColor() == currentPlayer.getPieceColor()) {
@@ -123,9 +125,8 @@ public class Game {
     }
 
     private void checkForPromotionMove(Move move, PieceType promotionPieceType) {
-        if (promotionPieceType != null &&
-            move instanceof PromotionMove) {
-
+        if (promotionPieceType != null
+                && move instanceof PromotionMove) {
             ((PromotionMove) move).setPromotionPieceType(promotionPieceType);
         }
     }
@@ -176,17 +177,20 @@ public class Game {
             return board.getPositions()
                 .stream()
                 .map(board::getPiece)
-                .anyMatch(p -> p.getType() == PieceType.BISHOP || p.getType() == PieceType.KNIGHT);
+                .anyMatch(p ->
+                    p.getType() == PieceType.BISHOP
+                    || p.getType() == PieceType.KNIGHT
+                );
         } else if (board.getPositions().size() == 4) {
             // Both Sides have a King and a Bishop, the Bishops being the same Color
-            List<Position> bishopPositions = board.getPositions()
+            List<Position> bishopsPos = board.getPositions()
                 .stream()
                 .filter(p -> board.getPiece(p).getType() == PieceType.BISHOP)
                 .toList();
 
-            return bishopPositions.size() == 2 &&
-                (bishopPositions.get(0).row() + bishopPositions.get(0).col()) % 2 ==
-                (bishopPositions.get(1).row() + bishopPositions.get(1).col()) % 2;
+            return bishopsPos.size() == 2
+                && (bishopsPos.get(0).row() + bishopsPos.get(0).col()) % 2 ==
+                   (bishopsPos.get(1).row() + bishopsPos.get(1).col()) % 2;
         }
         return false;
     }
@@ -208,7 +212,9 @@ public class Game {
     }
 
     private void emitMoveMadeEvent() {
-        moveMadeEventEmitter.trigger(new MoveMadeEvent(currentPlayer.getPieceColor()));
+        moveMadeEventEmitter.trigger(
+            new MoveMadeEvent(currentPlayer.getPieceColor())
+        );
     }
 
     private void emitTimeUpdatedEvent() {

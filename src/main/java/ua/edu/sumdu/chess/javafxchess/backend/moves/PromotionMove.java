@@ -14,11 +14,10 @@ public class PromotionMove extends Move {
     }
 
     public void setPromotionPieceType(PieceType pieceType) {
-        if (pieceType == PieceType.QUEEN ||
-            pieceType == PieceType.ROOK ||
-            pieceType == PieceType.BISHOP ||
-            pieceType == PieceType.KNIGHT) {
-
+        if (pieceType == PieceType.QUEEN
+                || pieceType == PieceType.ROOK
+                || pieceType == PieceType.BISHOP
+                || pieceType == PieceType.KNIGHT) {
             this.promotionPieceType = pieceType;
         }
     }

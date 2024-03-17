@@ -17,8 +17,10 @@ public class Knight extends Piece {
 
     @Override
     public List<Move> getMoves(Board board, Position from) {
-        List<Position> possibleToPositions = getPossibleToPositions(from);
-        List<Position> filteredToPositions = getFilteredToPositions(board, possibleToPositions);
+        List<Position> possibleToPositions
+            = getPossibleToPositions(from);
+        List<Position> filteredToPositions
+            = getFilteredToPositions(board, possibleToPositions);
 
         return filteredToPositions.stream()
             .map(to -> new RegularMove(from, to))
@@ -38,7 +40,8 @@ public class Knight extends Piece {
         return toPositions;
     }
 
-    private List<Position> getFilteredToPositions(Board board, List<Position> toPositions) {
+    private List<Position> getFilteredToPositions(Board board,
+                                                  List<Position> toPositions) {
         return toPositions.stream()
             .filter(toPos -> {
                 if (board.isOnBoard(toPos)) {
