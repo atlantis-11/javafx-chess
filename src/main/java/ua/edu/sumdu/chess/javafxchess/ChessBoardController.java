@@ -164,6 +164,7 @@ public class ChessBoardController {
 
         if (!legalMoves.isEmpty()) {
             selectedPos = pos;
+            highlightSelectedPosition();
 
             for (Move move : legalMoves) {
                 addLegalMoves(move);
@@ -172,6 +173,15 @@ public class ChessBoardController {
             Platform.runLater(() -> adjustSquareSize(boardPane.getWidth(),
                     boardPane.getHeight()));
         }
+    }
+
+    private void highlightSelectedPosition(){
+        StackPane selectedSquare = squareStackPanes[selectedPos.row()][selectedPos.col()];
+        Rectangle selectedSquareHighlight = new Rectangle();
+        selectedSquareHighlight.setFill(highlightedSquareColor);
+
+        selectedSquare.getChildren().add(1,selectedSquareHighlight);
+        changedStackPanes.add(selectedSquare);
     }
 
     private void addLegalMoves(Move move) {
