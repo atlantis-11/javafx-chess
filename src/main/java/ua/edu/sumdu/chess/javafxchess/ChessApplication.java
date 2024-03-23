@@ -28,9 +28,9 @@ public class ChessApplication extends Application {
         primaryStage.show();
 
         Game game = new Game();
-        game.onMoveMade(e -> controller.drawBoard());
 
         setupGameEventsHandlers(game);
+
         game.start();
 
         controller.setGame(game);
@@ -41,6 +41,7 @@ public class ChessApplication extends Application {
         launch(args);
     }
     public static void setupGameEventsHandlers(Game game) {
+        game.onMoveMade(e -> controller.drawBoard());
 //        game.onTimeUpdated(e -> {
 //            System.out.println(e.getCurrentColor().toString() + ": " + e.getTimeLeft());
 //        });
