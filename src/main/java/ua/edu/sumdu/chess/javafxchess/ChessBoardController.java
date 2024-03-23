@@ -10,7 +10,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import lombok.Getter;
 import lombok.Setter;
 import ua.edu.sumdu.chess.javafxchess.backend.Board;
 import ua.edu.sumdu.chess.javafxchess.backend.Game;
@@ -33,7 +32,7 @@ public class ChessBoardController {
     private Position selectedPos;
     private final List<StackPane> changedSquares = new ArrayList<>();
     private List<Move> currentLegalMoves = new ArrayList<>();
-    @Getter @Setter
+    @Setter
     private Game game;
 
     @FXML
@@ -126,13 +125,13 @@ public class ChessBoardController {
             ImageView pieceImageView = new ImageView();
             pieceImageView.setFitWidth(1);
             pieceImageView.setFitHeight(1);
-            pieceImageView.setImage(new Image(getImagePath(piece)));
+            pieceImageView.setImage(new Image(getPieceImagePath(piece)));
 
             square.getChildren().add(pieceImageView);
         }
     }
 
-    private String getImagePath(Piece piece) {
+    private String getPieceImagePath(Piece piece) {
         String symbol = switch (piece.getType()) {
             case KNIGHT -> "n";
             default -> piece.getType().name().substring(0, 1).toLowerCase();
