@@ -1,0 +1,22 @@
+.blackSquare {
+    -fx-fill: rgb(119, 153, 84);
+}
+
+.whiteSquare {
+    -fx-fill: rgb(233, 237, 204);
+}
+
+.highlightedSquare {
+    -fx-fill: rgba(255, 255, 51, 0.5);
+}
+
+.legalMoveWithCapture {
+    -fx-fill: transparent;
+    -fx-stroke: rgba(0, 0, 0, 0.14);
+}
+
+.legalMove {
+    -fx-fill: rgba(0, 0, 0, 0.14);
+    -fx-scale-x: 0.33;
+    -fx-scale-y: 0.33;
+}

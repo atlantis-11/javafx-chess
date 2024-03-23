@@ -8,7 +8,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import lombok.Getter;
@@ -32,13 +31,8 @@ public class ChessBoardController {
     private StackPane[][] squares;
     private List<StackPane> changedSquares;
     private Position selectedPos;
-
     @Getter @Setter
     private Game game;
-
-    private final Color BLACK_SQUARE_COLOR = Color.rgb(119, 153, 84);
-    private final Color WHITE_SQUARE_COLOR = Color.rgb(233, 237, 204);
-    private final Color HIGHLIGHTED_SQUARE_COLOR = Color.rgb(255, 255, 51, 0.5);
 
     @FXML
     public void initialize() {
@@ -61,9 +55,14 @@ public class ChessBoardController {
     private StackPane createSquare(int row, int col) {
         StackPane square = new StackPane();
         Rectangle rectangle = new Rectangle();
-        rectangle.setFill((row + col) % 2 == 0 ? WHITE_SQUARE_COLOR : BLACK_SQUARE_COLOR);
-        square.getChildren().add(rectangle);
 
+        if ((row + col) % 2 == 0) {
+            rectangle.getStyleClass().add("whiteSquare");
+        } else {
+            rectangle.getStyleClass().add("blackSquare");
+        }
+
+        square.getChildren().add(rectangle);
         return square;
     }
 
@@ -115,7 +114,7 @@ public class ChessBoardController {
                                    Position fromPos, Position toPos) {
         if (thisPos.equals(fromPos) || thisPos.equals(toPos)) {
             Rectangle lastMoveRectangle = new Rectangle();
-            lastMoveRectangle.setFill(HIGHLIGHTED_SQUARE_COLOR);
+            lastMoveRectangle.getStyleClass().add("highlightedSquare");
 
             square.getChildren().add(lastMoveRectangle);
         }
@@ -178,9 +177,9 @@ public class ChessBoardController {
     private void highlightSelectedPosition() {
         StackPane selectedSquare = squares[selectedPos.row()][selectedPos.col()];
         Rectangle selectedSquareHighlight = new Rectangle();
-        selectedSquareHighlight.setFill(HIGHLIGHTED_SQUARE_COLOR);
+        selectedSquareHighlight.getStyleClass().add("highlightedSquare");
 
-        selectedSquare.getChildren().add(1,selectedSquareHighlight);
+        selectedSquare.getChildren().add(1, selectedSquareHighlight);
         changedSquares.add(selectedSquare);
     }
 
@@ -253,7 +252,16 @@ public class ChessBoardController {
                 rectangle.setWidth(squareSize);
                 rectangle.setHeight(squareSize);
             } else if (child instanceof Circle circle) {
-                circle.setRadius(squareSize / 4);
+                boolean isWithCapture = circle.getStyleClass().stream()
+                    .anyMatch(styleClass -> styleClass.equals("legalMoveWithCapture"));
+
+                if (isWithCapture) {
+                    double strokeWidth = squareSize * 0.07;
+                    circle.setStrokeWidth(strokeWidth);
+                    circle.setRadius((squareSize - strokeWidth) / 2);
+                } else {
+                    circle.setRadius(squareSize / 2);
+                }
             } else if (child instanceof ImageView imageView) {
                 imageView.setFitWidth(squareSize);
                 imageView.setFitHeight(squareSize);

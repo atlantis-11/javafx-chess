@@ -18,7 +18,7 @@ public class ChessApplication extends Application {
         ChessBoardController controller = loader.getController();
 
         Scene scene = new Scene(root, 800, 600);
-        String css = Objects.requireNonNull(getClass().getResource("/legalMoves.css"))
+        String css = Objects.requireNonNull(getClass().getResource("/style.css"))
             .toExternalForm();
         scene.getStylesheets().add(css);
 
