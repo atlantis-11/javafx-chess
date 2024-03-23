@@ -3,8 +3,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 
-<AnchorPane fx:id="boardPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.edu.sumdu.chess.javafxchess.ChessBoardController">
-    <children>
-        <GridPane fx:id="boardGridPane" layoutX="22.0" layoutY="14.0" onMouseClicked="#moveClick" prefHeight="141.0" prefWidth="172.0" />
-    </children>
+<AnchorPane fx:id="boardPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ua.edu.sumdu.chess.javafxchess.ChessBoardController">
+    <GridPane fx:id="boardGridPane" layoutX="20" layoutY="20" onMouseClicked="#handleSquareClick" />
 </AnchorPane>

@@ -10,52 +10,32 @@ import ua.edu.sumdu.chess.javafxchess.backend.Game;
 import java.io.IOException;
 import java.util.Objects;
 
-
 public class ChessApplication extends Application {
-    private static ChessBoardController controller;
-
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("chessBoard.fxml"));
         Parent root = loader.load();
-        controller = loader.getController();
+        ChessBoardController controller = loader.getController();
 
-        primaryStage.setTitle("JavaFX Application");
         Scene scene = new Scene(root, 800, 600);
-        String css = Objects.requireNonNull(getClass().getResource("/legalMoves.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource("/legalMoves.css"))
+            .toExternalForm();
         scene.getStylesheets().add(css);
+
+        primaryStage.setTitle("Chess");
         primaryStage.setScene(scene);
         primaryStage.show();
 
         Game game = new Game();
-
-        setupGameEventsHandlers(game);
-
         game.start();
 
         controller.setGame(game);
+        controller.setupGameEventsHandlers();
         controller.drawBoard();
     }
 
     public static void main(String[] args) {
         launch(args);
-    }
-    public static void setupGameEventsHandlers(Game game) {
-        game.onMoveMade(e -> controller.drawBoard());
-//        game.onTimeUpdated(e -> {
-//            System.out.println(e.getCurrentColor().toString() + ": " + e.getTimeLeft());
-//        });
-
-//        game.onWin(e -> {
-//            System.out.println("Winner: " + e.getWinner().toString()
-//                    + ", reason: " + e.getReason().toString());
-//            System.exit(0);
-//        });
-//
-//        game.onDraw(e -> {
-//            System.out.println("Draw" + ", reason: " + e.getReason().toString());
-//            System.exit(0);
-//        });
     }
 }
 
