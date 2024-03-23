@@ -99,8 +99,6 @@ public class Game {
                 if (!checkForGameOver()) {
                     currentPlayer = getOpponent();
                 }
-            } else {
-                emitMoveMadeEvent();
             }
         }
     }

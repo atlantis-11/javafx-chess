@@ -16,6 +16,7 @@ import ua.edu.sumdu.chess.javafxchess.backend.Board;
 import ua.edu.sumdu.chess.javafxchess.backend.Game;
 import ua.edu.sumdu.chess.javafxchess.backend.Position;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
+import ua.edu.sumdu.chess.javafxchess.backend.moves.PromotionMove;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.Piece;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
 
@@ -29,8 +30,9 @@ public class ChessBoardController {
     @FXML
     private GridPane boardGridPane;
     private StackPane[][] squares;
-    private List<StackPane> changedSquares;
     private Position selectedPos;
+    private final List<StackPane> changedSquares = new ArrayList<>();
+    private List<Move> currentLegalMoves = new ArrayList<>();
     @Getter @Setter
     private Game game;
 
@@ -38,7 +40,6 @@ public class ChessBoardController {
     public void initialize() {
         initializeSquares();
         addBoardPaneSizeChangeListeners();
-        changedSquares = new ArrayList<>();
     }
 
     private void initializeSquares() {
@@ -148,7 +149,30 @@ public class ChessBoardController {
         if (selectedPos == null) {
             handleSelection(pos);
         } else {
-            handleMove(pos);
+            Move chosenMove = currentLegalMoves.stream()
+                .filter(move -> move.getTo().equals(pos))
+                .findFirst()
+                .orElse(null);
+
+            if (chosenMove != null) {
+                if (chosenMove instanceof PromotionMove) {
+                    System.out.println("This is a promotion move");
+                }
+
+                handleMove(pos);
+            } else {
+                Piece selectedPiece = game.getBoard().getPiece(selectedPos);
+
+                clearSelection();
+
+                Piece pieceAtPos = game.getBoard().getPiece(pos);
+
+                if (pieceAtPos != null
+                        && pieceAtPos.getColor() == selectedPiece.getColor()) {
+                    // select another piece
+                    handleSelection(pos);
+                }
+            }
         }
     }
 
@@ -160,14 +184,14 @@ public class ChessBoardController {
     }
 
     private void handleSelection(Position pos) {
-        List<Move> legalMoves = game.getLegalMoves(pos);
+        currentLegalMoves = new ArrayList<>(game.getLegalMoves(pos));
 
-        if (!legalMoves.isEmpty()) {
+        if (!currentLegalMoves.isEmpty()) {
             selectedPos = pos;
             highlightSelectedPosition();
 
-            for (Move move : legalMoves) {
-                addLegalMove(move);
+            for (Move move : currentLegalMoves) {
+                highlightLegalMove(move);
             }
 
             updateChangedSquaresSize();
@@ -183,7 +207,7 @@ public class ChessBoardController {
         changedSquares.add(selectedSquare);
     }
 
-    private void addLegalMove(Move move) {
+    private void highlightLegalMove(Move move) {
         int legalMoveRow = move.getTo().row();
         int legalMoveCol = move.getTo().col();
 
@@ -216,6 +240,13 @@ public class ChessBoardController {
     private void handleMove(Position pos) {
         game.makeMove(selectedPos, pos);
         selectedPos = null;
+        currentLegalMoves.clear();
+    }
+
+    private void clearSelection() {
+        selectedPos = null;
+        currentLegalMoves.clear();
+        drawBoard();
     }
 
     private void updateAllSquaresSize() {
