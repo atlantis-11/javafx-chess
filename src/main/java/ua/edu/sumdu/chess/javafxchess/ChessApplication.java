@@ -13,9 +13,9 @@ import java.util.Objects;
 public class ChessApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("chessBoard.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
         Parent root = loader.load();
-        ChessBoardController controller = loader.getController();
+        MainWindowController controller = loader.getController();
 
         Scene scene = new Scene(root, 800, 600);
         String css = Objects.requireNonNull(getClass().getResource("/style.css"))

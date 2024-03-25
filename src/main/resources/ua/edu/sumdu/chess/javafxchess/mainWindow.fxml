@@ -10,7 +10,7 @@
 <?import javafx.geometry.Insets?>
 
 <BorderPane fx:id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ua.edu.sumdu.chess.javafxchess.ChessBoardController"
+            fx:controller="ua.edu.sumdu.chess.javafxchess.MainWindowController"
             styleClass="mainPane">
     <center>
         <VBox fx:id="mainColumn">

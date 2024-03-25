@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ChessBoardController {
+public class MainWindowController {
     @FXML
     private BorderPane mainPane;
     @FXML
