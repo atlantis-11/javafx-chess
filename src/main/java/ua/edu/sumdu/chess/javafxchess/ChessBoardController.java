@@ -2,6 +2,9 @@ package ua.edu.sumdu.chess.javafxchess;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -9,6 +12,8 @@ import javafx.scene.layout.*;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import lombok.Setter;
 import ua.edu.sumdu.chess.javafxchess.backend.Board;
 import ua.edu.sumdu.chess.javafxchess.backend.Game;
@@ -17,7 +22,9 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.PromotionMove;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.Piece;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
+import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceType;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -158,37 +165,63 @@ public class ChessBoardController {
     }
 
     @FXML
-    public void handleSquareClick(MouseEvent event) {
-        Position pos = getPositionFromMouseEvent(event);
+    public void handleSquareClick(MouseEvent mouseEvent) throws IOException {
+        Position toPos = getPositionFromMouseEvent(mouseEvent);
 
         if (selectedPos == null) {
-            handleSelection(pos);
+            handleSelection(toPos);
         } else {
             Move chosenMove = currentLegalMoves.stream()
-                .filter(move -> move.getTo().equals(pos))
+                .filter(move -> move.getTo().equals(toPos))
                 .findFirst()
                 .orElse(null);
 
             if (chosenMove != null) {
                 if (chosenMove instanceof PromotionMove) {
-                    System.out.println("This is a promotion move");
+                    showPromotionWindow(toPos, mouseEvent);
+                } else {
+                    handleMove(toPos);
                 }
-
-                handleMove(pos);
             } else {
                 Piece selectedPiece = game.getBoard().getPiece(selectedPos);
 
                 clearSelection();
 
-                Piece pieceAtPos = game.getBoard().getPiece(pos);
+                Piece pieceAtPos = game.getBoard().getPiece(toPos);
 
                 if (pieceAtPos != null
                         && pieceAtPos.getColor() == selectedPiece.getColor()) {
                     // select another piece
-                    handleSelection(pos);
+                    handleSelection(toPos);
                 }
             }
         }
+    }
+
+    private void showPromotionWindow(Position toPos, MouseEvent mouseEvent) throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("promotionWindow.fxml"));
+        loader.setControllerFactory(c ->
+            new PromotionWindowController(
+                stage,
+                game.getBoard().getPiece(selectedPos).getColor(),
+                getSquareSize(),
+                selectedPieceType -> handlePromotionMove(toPos, selectedPieceType)
+            )
+        );
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Promote to");
+
+        stage.setX(mouseEvent.getScreenX());
+        stage.setY(mouseEvent.getScreenY());
+
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(mainColumn.getScene().getWindow());
+
+        stage.showAndWait();
     }
 
     private Position getPositionFromMouseEvent(MouseEvent event) {
@@ -252,8 +285,14 @@ public class ChessBoardController {
         return lastMoveCircle;
     }
 
-    private void handleMove(Position pos) {
-        game.makeMove(selectedPos, pos);
+    private void handleMove(Position toPos) {
+        game.makeMove(selectedPos, toPos);
+        selectedPos = null;
+        currentLegalMoves.clear();
+    }
+
+    private void handlePromotionMove(Position toPos, PieceType promotionPieceType) {
+        game.makeMove(selectedPos, toPos, promotionPieceType);
         selectedPos = null;
         currentLegalMoves.clear();
     }
