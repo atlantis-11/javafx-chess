@@ -1,12 +1,11 @@
 package ua.edu.sumdu.chess.javafxchess;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -25,9 +24,16 @@ import java.util.List;
 
 public class ChessBoardController {
     @FXML
-    private AnchorPane boardPane;
+    private BorderPane mainPane;
     @FXML
     private GridPane boardGridPane;
+    @FXML
+    private VBox mainColumn;
+    @FXML
+    private HBox topButtonRow;
+    @FXML
+    private HBox bottomButtonRow;
+
     private StackPane[][] squares;
     private Position selectedPos;
     private final List<StackPane> changedSquares = new ArrayList<>();
@@ -38,7 +44,7 @@ public class ChessBoardController {
     @FXML
     public void initialize() {
         initializeSquares();
-        addBoardPaneSizeChangeListeners();
+        addMainPaneSizeChangeListeners();
     }
 
     private void initializeSquares() {
@@ -66,9 +72,19 @@ public class ChessBoardController {
         return square;
     }
 
-    private void addBoardPaneSizeChangeListeners() {
-        boardPane.widthProperty().addListener(e -> updateAllSquaresSize());
-        boardPane.heightProperty().addListener(e -> updateAllSquaresSize());
+    private void addMainPaneSizeChangeListeners() {
+        mainPane.widthProperty().addListener(e -> handleMainPaneSizeChange());
+        mainPane.heightProperty().addListener(e -> handleMainPaneSizeChange());
+    }
+
+    private void handleMainPaneSizeChange() {
+        updateAllSquaresSize();
+
+        Platform.runLater(() -> {
+            mainColumn.setMaxWidth(boardGridPane.getWidth());
+            mainColumn.setMaxHeight(boardGridPane.getHeight()
+                + topButtonRow.getHeight() + bottomButtonRow.getHeight());
+        });
     }
 
     public void setupGameEventsHandlers() {
@@ -268,10 +284,15 @@ public class ChessBoardController {
     }
 
     private double getSquareSize() {
-        double availableWidth = boardPane.getWidth()
-            - 2 * boardGridPane.getLayoutX();
-        double availableHeight = boardPane.getHeight()
-            - 2 * boardGridPane.getLayoutY();
+        double availableWidth = mainPane.getWidth()
+            - mainPane.getPadding().getLeft()
+            - mainPane.getPadding().getRight();
+
+        double availableHeight = mainPane.getHeight()
+            - mainPane.getPadding().getTop()
+            - mainPane.getPadding().getBottom()
+            - topButtonRow.getHeight()
+            - bottomButtonRow.getHeight();
 
         return Math.min(availableWidth, availableHeight) / 8;
     }

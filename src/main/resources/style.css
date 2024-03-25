@@ -1,3 +1,48 @@
+@font-face {
+    src: url('fonts/chessglyphv3.ttf');
+}
+
+@font-face {
+    src: url('fonts/montserrat.ttf');
+}
+
+.chessGlyphFont {
+    -fx-font-family: 'chessglyphv3';
+}
+
+.mainPane {
+    -fx-padding: 30 20;
+    -fx-font-size: 15px;
+    -fx-font-family: 'Montserrat';
+    -fx-background-color: #31302c;
+}
+
+.boardGridPane {
+    -fx-background-color: rgb(233, 237, 204);
+}
+
+.control {
+    -fx-background-color: #484744;
+}
+
+.control * {
+    -fx-text-fill: white;
+}
+
+.timer {
+    -fx-font-family: 'chessglyphv3';
+}
+
+.timerBlack {
+    -fx-background-color: #262421;
+    -fx-text-fill: white;
+}
+
+.timerWhite {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
 .blackSquare {
     -fx-fill: rgb(119, 153, 84);
 }
