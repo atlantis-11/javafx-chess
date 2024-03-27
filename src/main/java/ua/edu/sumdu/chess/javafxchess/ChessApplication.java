@@ -5,7 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import ua.edu.sumdu.chess.javafxchess.backend.EngineGame;
 import ua.edu.sumdu.chess.javafxchess.backend.Game;
+import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -26,7 +28,7 @@ public class ChessApplication extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Game game = new Game();
+        Game game = new EngineGame(PieceColor.BLACK);
         game.start();
 
         controller.setGame(game);

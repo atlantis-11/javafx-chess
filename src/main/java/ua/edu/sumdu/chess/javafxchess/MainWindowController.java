@@ -1,5 +1,6 @@
 package ua.edu.sumdu.chess.javafxchess;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -56,7 +57,7 @@ public class MainWindowController {
     }
 
     public void setupGameEventsHandlers() {
-        game.onMoveMade(e -> drawBoard());
+        game.onMoveMade(e -> Platform.runLater(this::drawBoard));
     }
 
     public void drawBoard() {

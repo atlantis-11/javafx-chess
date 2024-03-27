@@ -16,9 +16,9 @@ import java.util.function.Consumer;
 public class Game {
     @Getter
     private Board board;
-    private final Player playerW = new Player(PieceColor.WHITE);
-    private final Player playerB = new Player(PieceColor.BLACK);
-    private Player currentPlayer;
+    protected final Player playerW = new Player(PieceColor.WHITE);
+    protected final Player playerB = new Player(PieceColor.BLACK);
+    protected Player currentPlayer;
     private final int timeInSeconds;
     private Timer timer;
     private final EventEmitter<MoveMadeEvent> moveMadeEventEmitter
