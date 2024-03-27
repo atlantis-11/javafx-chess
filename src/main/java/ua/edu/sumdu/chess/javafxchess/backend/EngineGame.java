@@ -4,22 +4,27 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class EngineGame extends Game {
     private final Player humanPlayer;
-    private final Stockfish stockfish = new Stockfish();
+    private final Stockfish stockfish;
 
-    public EngineGame(PieceColor humanPlayerPieceColor) throws IOException {
+    public EngineGame(PieceColor humanPlayerPieceColor, int engineSkillLevel) {
         humanPlayer = humanPlayerPieceColor == PieceColor.WHITE
             ? playerW
             : playerB;
+        stockfish = new Stockfish(engineSkillLevel);
     }
 
     @Override
     public void start() {
         super.start();
+
+        try {
+            stockfish.start();
+        } catch (IOException ignored) { }
 
         if (humanPlayer.getPieceColor() == PieceColor.BLACK) {
             makeEngineMove();
@@ -27,11 +32,19 @@ public class EngineGame extends Game {
     }
 
     @Override
+    protected void stop() {
+        super.stop();
+        try {
+            stockfish.stop();
+        } catch (IOException ignored) { }
+    }
+
+    @Override
     public List<Move> getLegalMoves(Position from) {
         if (isHumanCurrentPlayer()) {
             return super.getLegalMoves(from);
         } else {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
     }
 
@@ -66,9 +79,7 @@ public class EngineGame extends Game {
                 PieceType promotionPieceType = getStockfishPromotionPieceType(strMove);
 
                 super.makeMove(from, to, promotionPieceType);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception ignored) { }
         }).start();
     }
 

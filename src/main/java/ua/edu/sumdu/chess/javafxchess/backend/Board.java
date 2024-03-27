@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class Board {
@@ -71,7 +72,7 @@ public class Board {
         Piece piece = getPiece(pos);
 
         if (piece == null) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         return piece.getMoves(this, pos);

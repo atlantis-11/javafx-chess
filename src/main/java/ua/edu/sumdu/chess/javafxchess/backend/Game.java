@@ -7,15 +7,13 @@ import ua.edu.sumdu.chess.javafxchess.backend.pieces.*;
 import eventemitter.EventEmitter;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class Game {
     @Getter
     private Board board;
+    private boolean isGameInProgress = false;
     protected final Player playerW = new Player(PieceColor.WHITE);
     protected final Player playerB = new Player(PieceColor.BLACK);
     protected Player currentPlayer;
@@ -49,6 +47,13 @@ public class Game {
             playerB.setTimeLeft(timeInSeconds);
             startTheClock();
         }
+
+        isGameInProgress = true;
+    }
+
+    protected void stop() {
+        isGameInProgress = false;
+        stopTheClock();
     }
 
     private void startTheClock() {
@@ -73,18 +78,24 @@ public class Game {
     }
 
     public List<Move> getLegalMoves(Position from) {
-        Piece piece = board.getPiece(from);
+        if (isGameInProgress) {
+            Piece piece = board.getPiece(from);
 
-        if (piece != null
-                && piece.getColor() == currentPlayer.getPieceColor()) {
-            return board.getLegalMoves(from);
+            if (piece != null
+                    && piece.getColor() == currentPlayer.getPieceColor()) {
+                return board.getLegalMoves(from);
+            }
         }
 
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     public void makeMove(Position from, Position to,
                          PieceType promotionPieceType) {
+        if (!isGameInProgress) {
+            return;
+        }
+
         Piece fromPiece = board.getPiece(from);
 
         if (fromPiece.getColor() == currentPlayer.getPieceColor()) {
@@ -108,10 +119,18 @@ public class Game {
     }
 
     public void drawByAgreement() {
+        if (!isGameInProgress) {
+            return;
+        }
+
         emitDrawEvent(DrawReason.AGREEMENT);
     }
 
     public void resign() {
+        if (!isGameInProgress) {
+            return;
+        }
+
         emitWinEvent(WinReason.RESIGNATION);
     }
 
@@ -225,7 +244,7 @@ public class Game {
     }
 
     private void emitWinEvent(WinReason reason) {
-        stopTheClock();
+        stop();
         PieceColor winnerColor = switch (reason) {
             case RESIGNATION, TIMEOUT -> getOpponent().getPieceColor();
             default -> currentPlayer.getPieceColor();
@@ -234,7 +253,7 @@ public class Game {
     }
 
     private void emitDrawEvent(DrawReason reason) {
-        stopTheClock();
+        stop();
         drawEventEmitter.trigger(new DrawEvent(reason));
     }
 }

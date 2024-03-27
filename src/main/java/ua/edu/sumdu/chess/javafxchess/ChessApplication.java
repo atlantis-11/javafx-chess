@@ -28,7 +28,7 @@ public class ChessApplication extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Game game = new EngineGame(PieceColor.BLACK);
+        Game game = new EngineGame(PieceColor.BLACK, 10);
         game.start();
 
         controller.setGame(game);

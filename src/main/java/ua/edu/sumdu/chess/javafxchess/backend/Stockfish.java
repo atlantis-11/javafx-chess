@@ -3,10 +3,15 @@ package ua.edu.sumdu.chess.javafxchess.backend;
 import java.io.*;
 
 public class Stockfish {
-    private final BufferedReader reader;
-    private final BufferedWriter writer;
+    private BufferedReader reader;
+    private BufferedWriter writer;
+    private final int skillLevel;
 
-    public Stockfish() throws IOException {
+    public Stockfish(int skillLevel) {
+        this.skillLevel = skillLevel;
+    }
+
+    public void start() throws IOException {
         ProcessBuilder builder = new ProcessBuilder(
             Stockfish.class
                 .getClassLoader()
@@ -22,11 +27,21 @@ public class Stockfish {
         writer = new BufferedWriter(new OutputStreamWriter(stdin));
 
         sendCommand("uci");
+        setSkillLevel(skillLevel);
+    }
+
+    public void stop() throws IOException {
+        sendCommand("quit");
     }
 
     private void sendCommand(String command) throws IOException {
         writer.write(command + "\n");
         writer.flush();
+    }
+
+    private void setSkillLevel(int skillLevel) throws IOException {
+        sendCommand("setoption name Skill Level value "
+            + Math.min(Math.max(skillLevel, 0), 20));
     }
 
     public String getBestMove(String fen, int waitTime) throws IOException, InterruptedException {
@@ -40,6 +55,6 @@ public class Stockfish {
             line = reader.readLine();
         } while (!line.contains("bestmove"));
 
-        return line.split("bestmove ")[1].split(" ")[0];
+        return line.split(" ")[1];
     }
 }
