@@ -1,5 +1,6 @@
 package ua.edu.sumdu.chess.javafxchess.backend;
 
+import javafx.application.Platform;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.*;
 
@@ -78,7 +79,7 @@ public class EngineGame extends Game {
                 Position to = stockfishCoordToPosition(strMove.substring(2, 4));
                 PieceType promotionPieceType = getStockfishPromotionPieceType(strMove);
 
-                super.makeMove(from, to, promotionPieceType);
+                Platform.runLater(() -> super.makeMove(from, to, promotionPieceType));
             } catch (Exception ignored) { }
         }).start();
     }
