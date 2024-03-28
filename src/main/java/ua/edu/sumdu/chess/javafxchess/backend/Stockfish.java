@@ -1,8 +1,10 @@
 package ua.edu.sumdu.chess.javafxchess.backend;
 
 import java.io.*;
+import java.util.Objects;
 
 public class Stockfish {
+    private Process process;
     private BufferedReader reader;
     private BufferedWriter writer;
     private final int skillLevel;
@@ -13,13 +15,14 @@ public class Stockfish {
 
     public void start() throws IOException {
         ProcessBuilder builder = new ProcessBuilder(
-            Stockfish.class
-                .getClassLoader()
-                .getResource("stockfish-windows-x86-64-sse41-popcnt.exe")
-                .getPath()
+            Objects.requireNonNull(
+                Stockfish.class
+                    .getClassLoader()
+                    .getResource("stockfish-windows-x86-64-sse41-popcnt.exe")
+            ).getPath()
         );
 
-        Process process = builder.start();
+        process = builder.start();
         OutputStream stdin = process.getOutputStream();
         InputStream stdout = process.getInputStream();
 
@@ -30,8 +33,12 @@ public class Stockfish {
         setSkillLevel(skillLevel);
     }
 
-    public void stop() throws IOException {
-        sendCommand("quit");
+    public void stop() {
+        try {
+            sendCommand("quit");
+        } catch (IOException e) {
+            process.destroy();
+        }
     }
 
     private void sendCommand(String command) throws IOException {

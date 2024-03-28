@@ -1,16 +1,21 @@
 package ua.edu.sumdu.chess.javafxchess.backend;
 
+import eventemitter.EventEmitter;
 import javafx.application.Platform;
+import ua.edu.sumdu.chess.javafxchess.backend.events.StockfishErrorEvent;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.*;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class EngineGame extends Game {
     private final Player humanPlayer;
     private final Stockfish stockfish;
+    private final EventEmitter<StockfishErrorEvent> stockfishErrorEventEmitter
+        = new EventEmitter<>();
 
     public EngineGame(PieceColor humanPlayerPieceColor, int engineSkillLevel) {
         humanPlayer = humanPlayerPieceColor == PieceColor.WHITE
@@ -25,7 +30,9 @@ public class EngineGame extends Game {
 
         try {
             stockfish.start();
-        } catch (IOException ignored) { }
+        } catch (IOException e) {
+            emitStockfishErrorEvent();
+        }
 
         if (humanPlayer.getPieceColor() == PieceColor.BLACK) {
             makeEngineMove();
@@ -35,9 +42,7 @@ public class EngineGame extends Game {
     @Override
     protected void stop() {
         super.stop();
-        try {
-            stockfish.stop();
-        } catch (IOException ignored) { }
+        stockfish.stop();
     }
 
     @Override
@@ -80,7 +85,9 @@ public class EngineGame extends Game {
                 PieceType promotionPieceType = getStockfishPromotionPieceType(strMove);
 
                 Platform.runLater(() -> super.makeMove(from, to, promotionPieceType));
-            } catch (Exception ignored) { }
+            } catch (Exception e) {
+                Platform.runLater(this::emitStockfishErrorEvent);
+            }
         }).start();
     }
 
@@ -106,5 +113,14 @@ public class EngineGame extends Game {
 
     private boolean isHumanCurrentPlayer() {
         return humanPlayer.equals(currentPlayer);
+    }
+
+    public void onStockfishErrorEvent(Consumer<StockfishErrorEvent> c) {
+        stockfishErrorEventEmitter.addConsumer(c);
+    }
+
+    private void emitStockfishErrorEvent() {
+        stop();
+        stockfishErrorEventEmitter.trigger(new StockfishErrorEvent());
     }
 }
