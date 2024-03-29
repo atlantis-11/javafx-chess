@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
@@ -14,12 +15,15 @@ import ua.edu.sumdu.chess.javafxchess.backend.Position;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.PromotionMove;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.Piece;
+import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceType;
 import ua.edu.sumdu.chess.javafxchess.services.BoardDrawer;
 import ua.edu.sumdu.chess.javafxchess.services.Resizer;
 import ua.edu.sumdu.chess.javafxchess.services.SquaresInitializer;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +38,12 @@ public class MainWindowController {
     private HBox topButtonRow;
     @FXML
     private HBox bottomButtonRow;
+    @FXML
+    private Button timerButtonBlack;
+    @FXML
+    private Button timerButtonWhite;
     private StackPane[][] squares;
-
+    private final int timeInSeconds;
     @Setter
     private Game game;
     private Position selectedPos;
@@ -43,6 +51,10 @@ public class MainWindowController {
 
     private BoardDrawer boardDrawer;
     private Resizer resizer;
+
+    public MainWindowController(int timeInSeconds) {
+        this.timeInSeconds = timeInSeconds;
+    }
 
     @FXML
     public void initialize() {
@@ -52,16 +64,36 @@ public class MainWindowController {
             topButtonRow, bottomButtonRow);
         resizer.addMainPaneSizeChangeListeners(squares);
 
+        timerButtonBlack.setText(convertSecondsToHMS(timeInSeconds));
+        timerButtonWhite.setText(convertSecondsToHMS(timeInSeconds));
+
         boardDrawer = new BoardDrawer(squares);
     }
 
     public void setupGameEventsHandlers() {
         game.onMoveMade(e -> drawBoard());
     }
+    public void setupTimerEventsHandlers() {
+        game.onTimeUpdated(e -> updateTimer());
+    }
 
     public void drawBoard() {
         boardDrawer.drawBoard(game.getBoard());
         resizer.updateSquaresSize(squares);
+    }
+
+    public void updateTimer(){
+        if (game.getCurrentPlayer().getPieceColor().equals(PieceColor.WHITE)) {
+            timerButtonWhite.setText(convertSecondsToHMS(game.getPlayerW().getTimeLeft()));
+        } else {
+            timerButtonBlack.setText(convertSecondsToHMS(game.getPlayerB().getTimeLeft()));
+        }
+    }
+
+    public static String convertSecondsToHMS(int seconds) {
+        LocalTime time = LocalTime.ofSecondOfDay(seconds);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        return time.format(formatter);
     }
 
     @FXML

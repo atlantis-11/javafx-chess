@@ -11,11 +11,13 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class ChessApplication extends Application {
+    private final int timeInSeconds = 100;
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
+        MainWindowController controller = new MainWindowController(timeInSeconds);
+        loader.setControllerFactory(c -> controller);
         Parent root = loader.load();
-        MainWindowController controller = loader.getController();
 
         Scene scene = new Scene(root, 800, 600);
         String css = Objects.requireNonNull(getClass().getResource("/style.css"))
@@ -26,11 +28,12 @@ public class ChessApplication extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Game game = new Game();
+        Game game = new Game(timeInSeconds);
         game.start();
 
         controller.setGame(game);
         controller.setupGameEventsHandlers();
+        controller.setupTimerEventsHandlers();
         controller.drawBoard();
     }
 
