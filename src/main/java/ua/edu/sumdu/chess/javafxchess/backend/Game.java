@@ -17,12 +17,10 @@ import java.util.function.Consumer;
 public class Game {
     @Getter
     private Board board;
-    @Getter
     private final Player playerW = new Player(PieceColor.WHITE);
-    @Getter
     private final Player playerB = new Player(PieceColor.BLACK);
-    @Getter
     private Player currentPlayer;
+    @Getter
     private final int timeInSeconds;
     private Timer timer;
     private final EventEmitter<MoveMadeEvent> moveMadeEventEmitter
@@ -56,12 +54,13 @@ public class Game {
     }
 
     private void startTheClock() {
-        timer = new Timer();
+        timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 currentPlayer.decrementTimeLeft();
                 Platform.runLater(() -> emitTimeUpdatedEvent());
+
                 if (currentPlayer.getTimeLeft() == 0) {
                     Platform.runLater(() -> emitWinEvent(WinReason.TIMEOUT));
                 }

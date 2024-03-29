@@ -9,7 +9,9 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="mainPane" styleClass="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.edu.sumdu.chess.javafxchess.MainWindowController">
+<BorderPane fx:id="mainPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ua.edu.sumdu.chess.javafxchess.MainWindowController"
+            styleClass="mainPane">
     <center>
         <VBox fx:id="mainColumn">
             <HBox fx:id="topButtonRow">
@@ -28,11 +30,12 @@
 
                 <Region HBox.hgrow="ALWAYS" />
 
-                <Button fx:id="timerButtonBlack" disable="true" styleClass="timer, timerBlack"></Button>
+                <Button fx:id="timerBlack" styleClass="timer, timerBlack" />
             </HBox>
 
             <HBox>
-                <GridPane fx:id="boardGridPane" onMouseClicked="#handleSquareClick" styleClass="boardGridPane" />
+                <GridPane fx:id="boardGridPane" onMouseClicked="#handleSquareClick"
+                          styleClass="boardGridPane" />
             </HBox>
 
             <HBox fx:id="bottomButtonRow">
@@ -62,7 +65,7 @@
 
                 <Region HBox.hgrow="ALWAYS" />
 
-                <Button fx:id="timerButtonWhite" styleClass="timer, timerWhite"></Button>
+                <Button fx:id="timerWhite" styleClass="timer, timerWhite" />
             </HBox>
         </VBox>
     </center>
