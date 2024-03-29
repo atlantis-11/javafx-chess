@@ -184,6 +184,7 @@ public class MainWindowController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Promote to");
+        stage.setResizable(false);
 
         stage.setX(mouseEvent.getScreenX());
         stage.setY(mouseEvent.getScreenY());

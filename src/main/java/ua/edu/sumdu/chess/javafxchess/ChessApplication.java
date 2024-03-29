@@ -27,6 +27,8 @@ public class ChessApplication extends Application {
 
         primaryStage.setTitle("Chess");
         primaryStage.setScene(scene);
+        primaryStage.setMinWidth(400);
+        primaryStage.setMinHeight(450);
         primaryStage.show();
     }
 
