@@ -21,7 +21,7 @@ public class ChessApplication extends Application {
         Parent root = loader.load();
 
         Scene scene = new Scene(root, 800, 600);
-        String css = Objects.requireNonNull(getClass().getResource("/style.css"))
+        String css = Objects.requireNonNull(getClass().getResource("/mainWindow.css"))
             .toExternalForm();
         scene.getStylesheets().add(css);
 
