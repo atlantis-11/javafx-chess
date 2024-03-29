@@ -56,10 +56,8 @@ public class PromotionWindowController {
     }
 
     private String getPieceImagePath(PieceType pieceType) {
-        String symbol = switch (pieceType) {
-            case KNIGHT -> "n";
-            default -> pieceType.name().substring(0, 1).toLowerCase();
-        };
+        String symbol = pieceType == PieceType.KNIGHT
+            ? "n" : pieceType.name().substring(0, 1).toLowerCase();
 
         return (pieceColor == PieceColor.WHITE ? "w" : "b")
             + symbol + ".png";

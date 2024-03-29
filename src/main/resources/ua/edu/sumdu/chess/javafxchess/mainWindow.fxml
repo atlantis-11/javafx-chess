@@ -54,7 +54,7 @@
 
                 <Region prefWidth="10" />
 
-                <Button styleClass="control">
+                <Button fx:id="drawButton" styleClass="control">
                     <graphic>
                         <HBox spacing="2">
                             <Label styleClass="chessGlyphFont">+</Label>

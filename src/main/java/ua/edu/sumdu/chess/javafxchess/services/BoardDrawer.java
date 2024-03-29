@@ -10,6 +10,7 @@ import ua.edu.sumdu.chess.javafxchess.backend.Position;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.Piece;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
+import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceType;
 
 import java.util.List;
 
@@ -67,10 +68,8 @@ public class BoardDrawer {
     }
 
     private String getPieceImagePath(Piece piece) {
-        String symbol = switch (piece.getType()) {
-            case KNIGHT -> "n";
-            default -> piece.getType().name().substring(0, 1).toLowerCase();
-        };
+        String symbol = piece.getType() == PieceType.KNIGHT
+            ? "n" : piece.getType().name().substring(0, 1).toLowerCase();
 
         return (piece.getColor() == PieceColor.WHITE ? "w" : "b")
             + symbol + ".png";

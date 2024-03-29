@@ -35,7 +35,7 @@ public class Game {
     }
 
     public Game(int timeInSeconds) {
-        this.timeInSeconds = timeInSeconds;
+        this.timeInSeconds = Math.max(timeInSeconds, 0);
     }
 
     public void start() {

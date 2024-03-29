@@ -60,10 +60,8 @@ public class FENGenerator {
             return null;
         }
 
-        String symbol = switch (piece.getType()) {
-            case KNIGHT -> "n";
-            default -> piece.getType().name().substring(0, 1).toLowerCase();
-        };
+        String symbol = piece.getType() == PieceType.KNIGHT
+            ? "n" : piece.getType().name().substring(0, 1).toLowerCase();
 
         return piece.getColor() == PieceColor.WHITE
             ? symbol.toUpperCase()

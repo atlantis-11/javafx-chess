@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import ua.edu.sumdu.chess.javafxchess.backend.EngineGame;
 import ua.edu.sumdu.chess.javafxchess.backend.Game;
 import ua.edu.sumdu.chess.javafxchess.backend.Position;
 import ua.edu.sumdu.chess.javafxchess.backend.events.MoveMadeEvent;
@@ -44,6 +45,8 @@ public class MainWindowController {
     private Button timerWhite;
     @FXML
     private Button timerBlack;
+    @FXML
+    private Button drawButton;
     private StackPane[][] squares;
     private final Game game;
     private Position selectedPos;
@@ -67,10 +70,19 @@ public class MainWindowController {
 
         boardDrawer = new BoardDrawer(squares);
 
-        String time = secondsToTime(game.getTimeInSeconds());
-        timerWhite.setText(time);
-        timerBlack.setText(time);
-        timerBlack.setDisable(true);
+        if (game.getTimeInSeconds() == 0) {
+            timerWhite.setVisible(false);
+            timerBlack.setVisible(false);
+        } else {
+            String time = secondsToTime(game.getTimeInSeconds());
+            timerWhite.setText(time);
+            timerBlack.setText(time);
+            timerBlack.setDisable(true);
+        }
+
+        if (game instanceof EngineGame) {
+            drawButton.setVisible(false);
+        }
 
         Platform.runLater(() -> {
             game.start();
@@ -80,7 +92,10 @@ public class MainWindowController {
 
     private void setupGameEventsHandlers() {
         game.onMoveMade(this::moveMadeHandler);
-        game.onTimeUpdated(this::timeUpdatedHandler);
+
+        if (game.getTimeInSeconds() != 0) {
+            game.onTimeUpdated(this::timeUpdatedHandler);
+        }
     }
 
     private void moveMadeHandler(MoveMadeEvent e) {
