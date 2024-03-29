@@ -1,6 +1,7 @@
 package ua.edu.sumdu.chess.javafxchess;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -235,4 +236,15 @@ public class MainWindowController {
         currentLegalMoves.clear();
         drawBoard();
     }
+
+    @FXML
+    public void resignClickHandler(ActionEvent event) {
+        game.resign();
+    }
+
+    @FXML
+    public void drawClickHandler(ActionEvent event) {
+        game.drawByAgreement();
+    }
+
 }
