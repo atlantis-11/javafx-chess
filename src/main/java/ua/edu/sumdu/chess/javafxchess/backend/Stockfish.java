@@ -2,6 +2,8 @@ package ua.edu.sumdu.chess.javafxchess.backend;
 
 import java.io.*;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 public class Stockfish {
     private Process process;
@@ -51,17 +53,23 @@ public class Stockfish {
             + Math.min(Math.max(skillLevel, 0), 20));
     }
 
-    public String getBestMove(String fen, int waitTime) throws IOException, InterruptedException {
-        sendCommand("position fen " + fen);
-        sendCommand("go movetime " + waitTime);
+    public CompletableFuture<String> getBestMove(String fen, int waitTime) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                sendCommand("position fen " + fen);
+                sendCommand("go movetime " + waitTime);
 
-        Thread.sleep(waitTime + 20);
+                Thread.sleep(waitTime + 20);
 
-        String line;
-        do {
-            line = reader.readLine();
-        } while (!line.contains("bestmove"));
+                String line;
+                do {
+                    line = reader.readLine();
+                } while (!line.contains("bestmove"));
 
-        return line.split(" ")[1];
+                return line.split(" ")[1];
+            } catch (Exception e) {
+                throw new CompletionException(e);
+            }
+        });
     }
 }

@@ -76,19 +76,18 @@ public class EngineGame extends Game {
     }
 
     private void makeEngineMove() {
-        new Thread(() -> {
-            try {
-                String strMove = stockfish.getBestMove(getBoard().getFEN(), 200);
-
+        stockfish.getBestMove(getBoard().getFEN(), 300)
+            .thenAccept(strMove -> {
                 Position from = stockfishCoordToPosition(strMove.substring(0, 2));
                 Position to = stockfishCoordToPosition(strMove.substring(2, 4));
                 PieceType promotionPieceType = getStockfishPromotionPieceType(strMove);
 
                 Platform.runLater(() -> super.makeMove(from, to, promotionPieceType));
-            } catch (Exception e) {
+            })
+            .exceptionally(ex -> {
                 Platform.runLater(this::emitStockfishErrorEvent);
-            }
-        }).start();
+                return null;
+            });
     }
 
     private Position stockfishCoordToPosition(String coord) {
