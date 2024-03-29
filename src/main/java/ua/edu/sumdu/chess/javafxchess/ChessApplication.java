@@ -15,9 +15,12 @@ import java.util.Objects;
 public class ChessApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
+        int timeInSeconds = 600;
+        Game game = new Game(timeInSeconds);
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
+        loader.setControllerFactory(c -> new MainWindowController(game));
         Parent root = loader.load();
-        MainWindowController controller = loader.getController();
 
         Scene scene = new Scene(root, 800, 600);
         String css = Objects.requireNonNull(getClass().getResource("/style.css"))
@@ -27,13 +30,6 @@ public class ChessApplication extends Application {
         primaryStage.setTitle("Chess");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        Game game = new EngineGame(PieceColor.BLACK, 10);
-        game.start();
-
-        controller.setGame(game);
-        controller.setupGameEventsHandlers();
-        controller.drawBoard();
     }
 
     public static void main(String[] args) {

@@ -1,5 +1,6 @@
 package ua.edu.sumdu.chess.javafxchess.backend;
 
+import javafx.application.Platform;
 import ua.edu.sumdu.chess.javafxchess.backend.events.*;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.PromotionMove;
@@ -17,6 +18,7 @@ public class Game {
     protected final Player playerW = new Player(PieceColor.WHITE);
     protected final Player playerB = new Player(PieceColor.BLACK);
     protected Player currentPlayer;
+    @Getter
     private final int timeInSeconds;
     private Timer timer;
     private final EventEmitter<MoveMadeEvent> moveMadeEventEmitter
@@ -57,15 +59,15 @@ public class Game {
     }
 
     private void startTheClock() {
-        timer = new Timer();
+        timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 currentPlayer.decrementTimeLeft();
-                emitTimeUpdatedEvent();
+                Platform.runLater(() -> emitTimeUpdatedEvent());
 
                 if (currentPlayer.getTimeLeft() == 0) {
-                    emitWinEvent(WinReason.TIMEOUT);
+                    Platform.runLater(() -> emitWinEvent(WinReason.TIMEOUT));
                 }
             }
         }, 1000, 1000); // Run every second
