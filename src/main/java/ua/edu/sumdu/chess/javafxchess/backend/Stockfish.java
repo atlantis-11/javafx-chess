@@ -10,9 +10,11 @@ public class Stockfish {
     private BufferedReader reader;
     private BufferedWriter writer;
     private final int skillLevel;
+    private final int moveTime;
 
     public Stockfish(int skillLevel) {
-        this.skillLevel = skillLevel;
+        this.skillLevel = Math.min(Math.max(skillLevel, 0), 20);
+        this.moveTime = 100 * this.skillLevel + 500;
     }
 
     public void start() throws IOException {
@@ -32,7 +34,7 @@ public class Stockfish {
         writer = new BufferedWriter(new OutputStreamWriter(stdin));
 
         sendCommand("uci");
-        setSkillLevel(skillLevel);
+        setSkillLevel();
     }
 
     public void stop() {
@@ -48,18 +50,17 @@ public class Stockfish {
         writer.flush();
     }
 
-    private void setSkillLevel(int skillLevel) throws IOException {
-        sendCommand("setoption name Skill Level value "
-            + Math.min(Math.max(skillLevel, 0), 20));
+    private void setSkillLevel() throws IOException {
+        sendCommand("setoption name Skill Level value " + skillLevel);
     }
 
-    public CompletableFuture<String> getBestMove(String fen, int waitTime) {
+    public CompletableFuture<String> getBestMove(String fen) {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 sendCommand("position fen " + fen);
-                sendCommand("go movetime " + waitTime);
+                sendCommand("go movetime " + moveTime);
 
-                Thread.sleep(waitTime + 20);
+                Thread.sleep(moveTime);
 
                 String line;
                 do {

@@ -76,7 +76,7 @@ public class EngineGame extends Game {
     }
 
     private void makeEngineMove() {
-        stockfish.getBestMove(getBoard().getFEN(), 300)
+        stockfish.getBestMove(getBoard().getFEN())
             .thenAccept(strMove -> {
                 Position from = stockfishCoordToPosition(strMove.substring(0, 2));
                 Position to = stockfishCoordToPosition(strMove.substring(2, 4));
