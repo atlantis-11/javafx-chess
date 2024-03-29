@@ -23,6 +23,8 @@ public class ChessApplication extends Application {
         Parent root = loader.load();
 
         Scene scene = new Scene(root, 800, 600);
+        primaryStage.setMinHeight(450);
+        primaryStage.setMinWidth(450);
         String css = Objects.requireNonNull(getClass().getResource("/style.css"))
             .toExternalForm();
         scene.getStylesheets().add(css);
