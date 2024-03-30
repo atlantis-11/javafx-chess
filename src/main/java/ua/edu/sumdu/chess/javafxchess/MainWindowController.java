@@ -1,7 +1,6 @@
 package ua.edu.sumdu.chess.javafxchess;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +10,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import org.apache.commons.lang3.StringUtils;
 import ua.edu.sumdu.chess.javafxchess.backend.EngineGame;
 import ua.edu.sumdu.chess.javafxchess.backend.Game;
 import ua.edu.sumdu.chess.javafxchess.backend.Position;
@@ -26,10 +27,12 @@ import ua.edu.sumdu.chess.javafxchess.services.Resizer;
 import ua.edu.sumdu.chess.javafxchess.services.SquaresInitializer;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainWindowController {
     @FXML
@@ -65,8 +68,7 @@ public class MainWindowController {
     public void initialize() {
         squares = SquaresInitializer.initializeSquares(boardGridPane);
 
-        resizer = new Resizer(mainPane, boardGridPane, mainColumn,
-            topButtonRow, bottomButtonRow);
+        resizer = new Resizer(mainPane, mainColumn, topButtonRow, bottomButtonRow);
         resizer.addMainPaneSizeChangeListeners(squares);
 
         boardDrawer = new BoardDrawer(squares);
@@ -93,21 +95,30 @@ public class MainWindowController {
 
     private void setupGameEventsHandlers() {
         game.onMoveMade(this::moveMadeHandler);
-        game.onWin(e -> {
-            try {
-                showGameOverWindow(e.getWinner().toString() + " Won", "by " + e.getReason().toString());
-            } catch (IOException ignored) {
-            }
-        });
-        game.onDraw(e -> {
-            try {
-                showGameOverWindow( "Draw ", "by " + e.getReason().toString());
-            } catch (IOException ignored) {
-            }
-        });
+
         if (game.getTimeInSeconds() != 0) {
             game.onTimeUpdated(this::timeUpdatedHandler);
         }
+
+        game.onWin(e -> {
+            try {
+                String winner = StringUtils.capitalize(e.getWinner().toString().toLowerCase());
+                String reason = e.getReason().toString().toLowerCase();
+                showGameOverWindow(winner + " Won", "by " + reason);
+            } catch (IOException ex) {
+                throw new UncheckedIOException(ex);
+            }
+        });
+
+        game.onDraw(e -> {
+            try {
+                String reason = e.getReason().toString()
+                    .toLowerCase().replace('_', ' ');
+                showGameOverWindow("Draw", "by " + reason);
+            } catch (IOException ex) {
+                throw new UncheckedIOException(ex);
+            }
+        });
     }
 
     private void moveMadeHandler(MoveMadeEvent e) {
@@ -180,33 +191,6 @@ public class MainWindowController {
         return new Position(row, col);
     }
 
-    private void showPromotionWindow(Position toPos, MouseEvent mouseEvent) throws IOException {
-        Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("promotionWindow.fxml"));
-        loader.setControllerFactory(c ->
-            new PromotionWindowController(
-                stage,
-                game.getBoard().getPiece(selectedPos).getColor(),
-                resizer.getSquareSize(),
-                selectedPieceType -> handlePromotionMove(toPos, selectedPieceType)
-            )
-        );
-        Parent root = loader.load();
-
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Promote to");
-        stage.setResizable(false);
-
-        stage.setX(mouseEvent.getScreenX());
-        stage.setY(mouseEvent.getScreenY());
-
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(mainColumn.getScene().getWindow());
-
-        stage.showAndWait();
-    }
-
     private void handleSelection(Position pos) {
         currentLegalMoves = new ArrayList<>(game.getLegalMoves(pos));
 
@@ -249,13 +233,40 @@ public class MainWindowController {
     }
 
     @FXML
-    public void resignClickHandler(ActionEvent event) {
+    public void resignClickHandler() {
         game.resign();
     }
 
     @FXML
-    public void drawClickHandler(ActionEvent event) {
+    public void drawClickHandler() {
         game.drawByAgreement();
+    }
+
+    private void showPromotionWindow(Position toPos, MouseEvent mouseEvent) throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("promotionWindow.fxml"));
+        loader.setControllerFactory(c ->
+            new PromotionWindowController(
+                stage,
+                game.getBoard().getPiece(selectedPos).getColor(),
+                resizer.getSquareSize(),
+                selectedPieceType -> handlePromotionMove(toPos, selectedPieceType)
+            )
+        );
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Promote to");
+        stage.setResizable(false);
+
+        stage.setX(mouseEvent.getScreenX());
+        stage.setY(mouseEvent.getScreenY());
+
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(mainColumn.getScene().getWindow());
+
+        stage.showAndWait();
     }
 
     public void showGameOverWindow(String result, String reason) throws IOException {
@@ -267,15 +278,24 @@ public class MainWindowController {
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
+        String css = Objects.requireNonNull(getClass()
+            .getResource("/styles/gameOverWindow.css"))
+            .toExternalForm();
+        scene.getStylesheets().add(css);
+
         stage.setScene(scene);
         stage.setTitle("Game Over");
+        stage.setWidth(300);
+        stage.setHeight(150);
         stage.setResizable(false);
 
-//        stage.setX(mouseEvent.getScreenX());
-//        stage.setY(mouseEvent.getScreenY());
+        Window thisWindow = mainColumn.getScene().getWindow();
+
+        stage.setX(thisWindow.getX() + (thisWindow.getWidth() - stage.getWidth()) / 2);
+        stage.setY(thisWindow.getY() + (thisWindow.getHeight() - stage.getHeight()) / 2);
 
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(mainColumn.getScene().getWindow());
+        stage.initOwner(thisWindow);
 
         stage.showAndWait();
     }

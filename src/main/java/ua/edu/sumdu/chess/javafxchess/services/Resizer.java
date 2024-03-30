@@ -13,14 +13,12 @@ import java.util.stream.Stream;
 
 public class Resizer {
     private final BorderPane mainPane;
-    private final GridPane boardGridPane;
     private final VBox mainColumn;
     private final HBox topButtonRow;
     private final HBox bottomButtonRow;
 
-    public Resizer(BorderPane mainPane, GridPane boardGridPane, VBox mainColumn, HBox topButtonRow, HBox bottomButtonRow) {
+    public Resizer(BorderPane mainPane, VBox mainColumn, HBox topButtonRow, HBox bottomButtonRow) {
         this.mainPane = mainPane;
-        this.boardGridPane = boardGridPane;
         this.mainColumn = mainColumn;
         this.topButtonRow = topButtonRow;
         this.bottomButtonRow = bottomButtonRow;
@@ -34,11 +32,13 @@ public class Resizer {
     private void handleMainPaneSizeChange(StackPane[][] squares) {
         updateSquaresSize(squares);
 
-       Platform.runLater(() -> {
-            mainColumn.setMaxWidth(getSquareSize() * 8);
-            mainColumn.setMaxHeight(getSquareSize() * 8
+        Platform.runLater(() -> {
+            double boardSize = getSquareSize() * 8;
+
+            mainColumn.setMaxWidth(boardSize);
+            mainColumn.setMaxHeight(boardSize
                 + topButtonRow.getHeight() + bottomButtonRow.getHeight());
-       });
+        });
     }
 
     public void updateSquaresSize(StackPane[][] squares) {

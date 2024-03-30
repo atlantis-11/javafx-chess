@@ -1,9 +1,9 @@
 @font-face {
-    src: url('fonts/chessglyphv3.ttf');
+    src: url('../fonts/chessglyphv3.ttf');
 }
 
 @font-face {
-    src: url('fonts/montserrat.ttf');
+    src: url('../fonts/montserrat.ttf');
 }
 
 .chessGlyphFont {

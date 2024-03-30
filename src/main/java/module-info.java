@@ -2,6 +2,7 @@ module ua.edu.sumdu.chess.javafxchess {
     requires javafx.controls;
     requires javafx.fxml;
     requires eventemitter;
+    requires org.apache.commons.lang3;
     requires static lombok;
 
     opens ua.edu.sumdu.chess.javafxchess to javafx.fxml;

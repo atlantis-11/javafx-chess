@@ -13,6 +13,8 @@ import java.util.Objects;
 public class ChessApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
+        System.setProperty("prism.lcdtext", "false");
+
         int timeInSeconds = 600;
         Game game = new Game(timeInSeconds);
 
@@ -21,7 +23,8 @@ public class ChessApplication extends Application {
         Parent root = loader.load();
 
         Scene scene = new Scene(root, 800, 600);
-        String css = Objects.requireNonNull(getClass().getResource("/mainWindow.css"))
+        String css = Objects.requireNonNull(getClass()
+            .getResource("/styles/mainWindow.css"))
             .toExternalForm();
         scene.getStylesheets().add(css);
 

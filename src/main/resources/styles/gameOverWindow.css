@@ -1,0 +1,13 @@
+.mainPane {
+    -fx-background-color: #484744;
+    -fx-font-size: 20px;
+}
+
+Text {
+    -fx-fill: white;
+}
+
+.resultText {
+    -fx-font-size: 1.3em;
+    -fx-font-weight: bold;
+}
