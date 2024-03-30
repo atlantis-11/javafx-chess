@@ -34,11 +34,11 @@ public class Resizer {
     private void handleMainPaneSizeChange(StackPane[][] squares) {
         updateSquaresSize(squares);
 
-        Platform.runLater(() -> {
-            mainColumn.setMaxWidth(boardGridPane.getWidth());
-            mainColumn.setMaxHeight(boardGridPane.getHeight()
+       Platform.runLater(() -> {
+            mainColumn.setMaxWidth(getSquareSize() * 8);
+            mainColumn.setMaxHeight(getSquareSize() * 8
                 + topButtonRow.getHeight() + bottomButtonRow.getHeight());
-        });
+       });
     }
 
     public void updateSquaresSize(StackPane[][] squares) {
