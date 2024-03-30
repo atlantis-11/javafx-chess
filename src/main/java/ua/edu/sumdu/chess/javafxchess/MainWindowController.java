@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -102,7 +103,8 @@ public class MainWindowController {
 
         game.onWin(e -> {
             try {
-                String winner = StringUtils.capitalize(e.getWinner().toString().toLowerCase());
+                String winner = StringUtils.capitalize(e.getWinner()
+                    .toString().toLowerCase());
                 String reason = e.getReason().toString().toLowerCase();
                 showGameOverWindow(winner + " Won", "by " + reason);
             } catch (IOException ex) {
@@ -119,6 +121,11 @@ public class MainWindowController {
                 throw new UncheckedIOException(ex);
             }
         });
+
+        if (game instanceof EngineGame) {
+            ((EngineGame) game).onStockfishErrorEvent(e ->
+                showStockfishErrorAlert());
+        }
     }
 
     private void moveMadeHandler(MoveMadeEvent e) {
@@ -269,7 +276,7 @@ public class MainWindowController {
         stage.showAndWait();
     }
 
-    public void showGameOverWindow(String result, String reason) throws IOException {
+    private void showGameOverWindow(String result, String reason) throws IOException {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gameOverWindow.fxml"));
         loader.setControllerFactory(c ->
@@ -298,5 +305,11 @@ public class MainWindowController {
         stage.initOwner(thisWindow);
 
         stage.showAndWait();
+    }
+
+    private void showStockfishErrorAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Stockfish error");
+        alert.showAndWait();
     }
 }
