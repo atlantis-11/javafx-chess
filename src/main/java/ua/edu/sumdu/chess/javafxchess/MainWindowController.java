@@ -93,7 +93,18 @@ public class MainWindowController {
 
     private void setupGameEventsHandlers() {
         game.onMoveMade(this::moveMadeHandler);
-
+        game.onWin(e -> {
+            try {
+                showGameOverWindow(e.getWinner().toString() + " Won", "by " + e.getReason().toString());
+            } catch (IOException ignored) {
+            }
+        });
+        game.onDraw(e -> {
+            try {
+                showGameOverWindow( "Draw ", "by " + e.getReason().toString());
+            } catch (IOException ignored) {
+            }
+        });
         if (game.getTimeInSeconds() != 0) {
             game.onTimeUpdated(this::timeUpdatedHandler);
         }
@@ -247,4 +258,25 @@ public class MainWindowController {
         game.drawByAgreement();
     }
 
+    public void showGameOverWindow(String result, String reason) throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gameOverWindow.fxml"));
+        loader.setControllerFactory(c ->
+            new GameOverWindowController(result, reason)
+        );
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Game Over");
+        stage.setResizable(false);
+
+//        stage.setX(mouseEvent.getScreenX());
+//        stage.setY(mouseEvent.getScreenY());
+
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(mainColumn.getScene().getWindow());
+
+        stage.showAndWait();
+    }
 }
