@@ -43,7 +43,7 @@
                     <Insets top="10" />
                 </padding>
 
-                <Button styleClass="control" onAction="#resignClickHandler">
+                <Button styleClass="control" onAction="#handleResignClick">
                     <graphic>
                         <HBox spacing="2">
                             <Label styleClass="chessGlyphFont">Y</Label>
@@ -54,7 +54,7 @@
 
                 <Region prefWidth="10" />
 
-                <Button fx:id="drawButton" styleClass="control" onAction="#drawClickHandler">
+                <Button fx:id="drawButton" styleClass="control" onAction="#handleDrawClick">
                     <graphic>
                         <HBox spacing="2">
                             <Label styleClass="chessGlyphFont">+</Label>

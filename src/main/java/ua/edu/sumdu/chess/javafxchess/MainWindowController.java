@@ -95,10 +95,10 @@ public class MainWindowController {
     }
 
     private void setupGameEventsHandlers() {
-        game.onMoveMade(this::moveMadeHandler);
+        game.onMoveMade(this::handleMoveMadeEvent);
 
         if (game.getTimeInSeconds() != 0) {
-            game.onTimeUpdated(this::timeUpdatedHandler);
+            game.onTimeUpdated(this::handleTimeUpdatedEvent);
         }
 
         game.onWin(e -> {
@@ -128,7 +128,7 @@ public class MainWindowController {
         }
     }
 
-    private void moveMadeHandler(MoveMadeEvent e) {
+    private void handleMoveMadeEvent(MoveMadeEvent e) {
         drawBoard();
 
         boolean isWhite = e.getCurrentColor().equals(PieceColor.WHITE);
@@ -141,7 +141,7 @@ public class MainWindowController {
         resizer.updateSquaresSize(squares);
     }
 
-    private void timeUpdatedHandler(TimeUpdatedEvent e){
+    private void handleTimeUpdatedEvent(TimeUpdatedEvent e){
         Button currentTimer = e.getCurrentColor().equals(PieceColor.WHITE)
             ? timerWhite
             : timerBlack;
@@ -240,12 +240,12 @@ public class MainWindowController {
     }
 
     @FXML
-    public void resignClickHandler() {
+    public void handleResignClick() {
         game.resign();
     }
 
     @FXML
-    public void drawClickHandler() {
+    public void handleDrawClick() {
         game.drawByAgreement();
     }
 
