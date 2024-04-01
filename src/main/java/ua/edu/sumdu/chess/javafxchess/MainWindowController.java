@@ -104,7 +104,7 @@ public class MainWindowController {
         game.onWin(e -> {
             try {
                 String winner = StringUtils.capitalize(e.getWinner()
-                        .toString().toLowerCase());
+                    .toString().toLowerCase());
                 String reason = e.getReason().toString().toLowerCase();
                 showGameOverWindow(winner + " Won", "by " + reason);
             } catch (IOException ex) {
@@ -115,7 +115,7 @@ public class MainWindowController {
         game.onDraw(e -> {
             try {
                 String reason = e.getReason().toString()
-                        .toLowerCase().replace('_', ' ');
+                    .toLowerCase().replace('_', ' ');
                 showGameOverWindow("Draw", "by " + reason);
             } catch (IOException ex) {
                 throw new UncheckedIOException(ex);
@@ -124,7 +124,7 @@ public class MainWindowController {
 
         if (game instanceof EngineGame) {
             ((EngineGame) game).onStockfishErrorEvent(e ->
-                    showStockfishErrorAlert());
+                showStockfishErrorAlert());
         }
     }
 
@@ -143,8 +143,8 @@ public class MainWindowController {
 
     private void handleTimeUpdatedEvent(TimeUpdatedEvent e) {
         Button currentTimer = e.getCurrentColor().equals(PieceColor.WHITE)
-                ? timerWhite
-                : timerBlack;
+            ? timerWhite
+            : timerBlack;
 
         currentTimer.setText(secondsToTime(e.getTimeLeft()));
     }
@@ -163,35 +163,31 @@ public class MainWindowController {
 
         if (selectedPos == null) {
             handleSelection(toPos);
-        } else if (toPos.equals(selectedPos)) {
+        } else if (selectedPos.equals(toPos)) {
             clearSelection();
         } else {
-            if (toPos.equals(selectedPos)) {
-                clearSelection();
-            } else {
-                Move chosenMove = currentLegalMoves.stream()
-                        .filter(move -> move.getTo().equals(toPos))
-                        .findFirst()
-                        .orElse(null);
+            Move chosenMove = currentLegalMoves.stream()
+                .filter(move -> move.getTo().equals(toPos))
+                .findFirst()
+                .orElse(null);
 
-                if (chosenMove != null) {
-                    if (chosenMove instanceof PromotionMove) {
-                        showPromotionWindow(toPos, mouseEvent);
-                    } else {
-                        handleMove(toPos);
-                    }
+            if (chosenMove != null) {
+                if (chosenMove instanceof PromotionMove) {
+                    showPromotionWindow(toPos, mouseEvent);
                 } else {
-                    Piece selectedPiece = game.getBoard().getPiece(selectedPos);
+                    handleMove(toPos);
+                }
+            } else {
+                Piece selectedPiece = game.getBoard().getPiece(selectedPos);
 
-                    clearSelection();
+                clearSelection();
 
-                    Piece pieceAtPos = game.getBoard().getPiece(toPos);
+                Piece pieceAtPos = game.getBoard().getPiece(toPos);
 
-                    if (pieceAtPos != null
-                            && pieceAtPos.getColor() == selectedPiece.getColor()) {
-                        // select another piece
-                        handleSelection(toPos);
-                    }
+                if (pieceAtPos != null
+                        && pieceAtPos.getColor() == selectedPiece.getColor()) {
+                    // select another piece
+                    handleSelection(toPos);
                 }
             }
         }
@@ -223,8 +219,8 @@ public class MainWindowController {
     private void highlightLegalMoves() {
         boardDrawer.highlightLegalMoves(currentLegalMoves);
         resizer.updateSquaresSize(currentLegalMoves.stream()
-                .map(lm -> squares[lm.getTo().row()][lm.getTo().col()])
-                .toList());
+            .map(lm -> squares[lm.getTo().row()][lm.getTo().col()])
+            .toList());
     }
 
     private void handleMove(Position toPos) {
@@ -259,12 +255,12 @@ public class MainWindowController {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("promotionWindow.fxml"));
         loader.setControllerFactory(c ->
-                new PromotionWindowController(
-                        stage,
-                        game.getBoard().getPiece(selectedPos).getColor(),
-                        resizer.getSquareSize(),
-                        selectedPieceType -> handlePromotionMove(toPos, selectedPieceType)
-                )
+            new PromotionWindowController(
+                stage,
+                game.getBoard().getPiece(selectedPos).getColor(),
+                resizer.getSquareSize(),
+                selectedPieceType -> handlePromotionMove(toPos, selectedPieceType)
+            )
         );
         Parent root = loader.load();
 
@@ -286,14 +282,14 @@ public class MainWindowController {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gameOverWindow.fxml"));
         loader.setControllerFactory(c ->
-                new GameOverWindowController(result, reason)
+            new GameOverWindowController(result, reason)
         );
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
         String css = Objects.requireNonNull(getClass()
-                        .getResource("/styles/gameOverWindow.css"))
-                .toExternalForm();
+            .getResource("/styles/gameOverWindow.css"))
+            .toExternalForm();
         scene.getStylesheets().add(css);
 
         stage.setScene(scene);
