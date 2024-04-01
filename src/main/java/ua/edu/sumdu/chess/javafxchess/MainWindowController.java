@@ -163,6 +163,8 @@ public class MainWindowController {
 
         if (selectedPos == null) {
             handleSelection(toPos);
+        } else if (toPos.equals(selectedPos)) {
+            clearSelection();
         } else {
             if (toPos.equals(selectedPos)) {
                 clearSelection();
