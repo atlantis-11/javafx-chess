@@ -5,13 +5,14 @@ import ua.edu.sumdu.chess.javafxchess.backend.Position;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceType;
 import lombok.Getter;
+import lombok.NonNull;
 
 @Getter
 public abstract class Move {
     protected final Position from;
     protected final Position to;
 
-    public Move(Position from, Position to) {
+    public Move(@NonNull Position from, @NonNull Position to) {
         this.from = from;
         this.to = to;
     }
@@ -42,13 +43,13 @@ public abstract class Move {
 
     protected abstract void doExecute(Board board);
 
-    public void execute(Board board) {
+    public void execute(@NonNull Board board) {
         preExecute(board);
         doExecute(board);
         postExecute(board);
     }
 
-    public boolean isLegal(Board board) {
+    public boolean isLegal(@NonNull Board board) {
         PieceColor currentColor = board.getPiece(from).getColor();
         Board copiedBoard = board.makeCopy();
         execute(copiedBoard);

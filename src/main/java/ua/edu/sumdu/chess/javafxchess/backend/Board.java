@@ -1,5 +1,6 @@
 package ua.edu.sumdu.chess.javafxchess.backend;
 
+import lombok.NonNull;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.*;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class Board {
     @Getter
     private final List<String> repetitionFENHistory = new ArrayList<>();
 
-    public Piece getPiece(Position pos) {
+    public Piece getPiece(@NonNull Position pos) {
         if (isOnBoard(pos)) {
             return board[pos.row()][pos.col()];
         }
@@ -32,7 +33,7 @@ public class Board {
         return getPiece(new Position(row, col));
     }
 
-    public void setPiece(Position pos, Piece piece) {
+    public void setPiece(@NonNull Position pos, Piece piece) {
         if (isOnBoard(pos)) {
             board[pos.row()][pos.col()] = piece;
         }
@@ -42,7 +43,7 @@ public class Board {
         setPiece(new Position(row, col), piece);
     }
 
-    public boolean isOnBoard(Position pos) {
+    public boolean isOnBoard(@NonNull Position pos) {
         return pos.row() >= 0 && pos.row() < 8 &&
                pos.col() >= 0 && pos.col() < 8;
     }
@@ -68,7 +69,7 @@ public class Board {
             .toList();
     }
 
-    public List<Move> getMoves(Position pos) {
+    public List<Move> getMoves(@NonNull Position pos) {
         Piece piece = getPiece(pos);
 
         if (piece == null) {
@@ -78,20 +79,20 @@ public class Board {
         return piece.getMoves(this, pos);
     }
 
-    public List<Move> getLegalMoves(Position pos) {
+    public List<Move> getLegalMoves(@NonNull Position pos) {
         return getMoves(pos).stream()
             .filter(move -> move.isLegal(this))
             .toList();
     }
 
-    public List<Move> getLegalMoves(PieceColor color) {
+    public List<Move> getLegalMoves(@NonNull PieceColor color) {
         return getPositions(color).stream()
             .map(this::getLegalMoves)
             .flatMap(Collection::stream)
             .toList();
     }
 
-    public boolean isInCheck(PieceColor color) {
+    public boolean isInCheck(@NonNull PieceColor color) {
         PieceColor opponentColor = color == PieceColor.WHITE
             ? PieceColor.BLACK
             : PieceColor.WHITE;

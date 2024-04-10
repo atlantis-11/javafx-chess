@@ -1,5 +1,6 @@
 package ua.edu.sumdu.chess.javafxchess.backend.pieces;
 
+import lombok.NonNull;
 import ua.edu.sumdu.chess.javafxchess.backend.Board;
 import ua.edu.sumdu.chess.javafxchess.backend.Direction;
 import ua.edu.sumdu.chess.javafxchess.backend.Position;
@@ -20,7 +21,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public List<Move> getMoves(Board board, Position from) {
+    public List<Move> getMoves(@NonNull Board board, @NonNull Position from) {
         return getMovesInDirs(board, from, DIRS);
     }
 

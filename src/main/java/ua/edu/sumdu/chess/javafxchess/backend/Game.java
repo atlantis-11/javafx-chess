@@ -7,6 +7,7 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.PromotionMove;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.*;
 import eventemitter.EventEmitter;
 import lombok.Getter;
+import lombok.NonNull;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -79,7 +80,7 @@ public class Game {
         }
     }
 
-    public List<Move> getLegalMoves(Position from) {
+    public List<Move> getLegalMoves(@NonNull Position from) {
         if (isGameInProgress) {
             Piece piece = board.getPiece(from);
 
@@ -92,7 +93,7 @@ public class Game {
         return Collections.emptyList();
     }
 
-    public void makeMove(Position from, Position to,
+    public void makeMove(@NonNull Position from, @NonNull Position to,
                          PieceType promotionPieceType) {
         if (!isGameInProgress) {
             return;
@@ -214,19 +215,19 @@ public class Game {
         return false;
     }
 
-    public void onMoveMade(Consumer<MoveMadeEvent> c) {
+    public void onMoveMade(@NonNull Consumer<MoveMadeEvent> c) {
         moveMadeEventEmitter.addConsumer(c);
     }
 
-    public void onTimeUpdated(Consumer<TimeUpdatedEvent> c) {
+    public void onTimeUpdated(@NonNull Consumer<TimeUpdatedEvent> c) {
         timeUpdatedEventEmitter.addConsumer(c);
     }
 
-    public void onWin(Consumer<WinEvent> c) {
+    public void onWin(@NonNull Consumer<WinEvent> c) {
         winEventEmitter.addConsumer(c);
     }
 
-    public void onDraw(Consumer<DrawEvent> c) {
+    public void onDraw(@NonNull Consumer<DrawEvent> c) {
         drawEventEmitter.addConsumer(c);
     }
 

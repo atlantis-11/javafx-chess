@@ -7,6 +7,7 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.RegularMove;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,8 @@ public abstract class Piece {
     @Setter
     protected boolean hasMoved;
 
-    public Piece(PieceColor color, PieceType type) {
+    public Piece(@NonNull PieceColor color,
+                 @NonNull PieceType type) {
         this.color = color;
         this.type = type;
     }
@@ -50,7 +52,7 @@ public abstract class Piece {
         return moves;
     }
 
-    public boolean canCaptureKing(Board board, Position from) {
+    public boolean canCaptureKing(@NonNull Board board, @NonNull Position from) {
         return getMoves(board, from).stream()
             .anyMatch(move -> {
                 Piece piece = board.getPiece(move.getTo());

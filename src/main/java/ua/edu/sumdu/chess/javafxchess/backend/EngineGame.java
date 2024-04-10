@@ -2,6 +2,7 @@ package ua.edu.sumdu.chess.javafxchess.backend;
 
 import eventemitter.EventEmitter;
 import javafx.application.Platform;
+import lombok.NonNull;
 import ua.edu.sumdu.chess.javafxchess.backend.events.StockfishErrorEvent;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.*;
@@ -17,7 +18,8 @@ public class EngineGame extends Game {
     private final EventEmitter<StockfishErrorEvent> stockfishErrorEventEmitter
         = new EventEmitter<>();
 
-    public EngineGame(PieceColor humanPlayerPieceColor, int engineSkillLevel) {
+    public EngineGame(@NonNull PieceColor humanPlayerPieceColor,
+                      int engineSkillLevel) {
         humanPlayer = humanPlayerPieceColor == PieceColor.WHITE
             ? playerW
             : playerB;

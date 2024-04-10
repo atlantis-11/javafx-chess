@@ -1,5 +1,6 @@
 package ua.edu.sumdu.chess.javafxchess.backend;
 
+import lombok.NonNull;
 import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.Piece;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
@@ -8,7 +9,7 @@ import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceType;
 public class FENGenerator {
     private final Board board;
 
-    public FENGenerator(Board board) {
+    public FENGenerator(@NonNull Board board) {
         this.board = board;
     }
 

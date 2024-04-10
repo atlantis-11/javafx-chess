@@ -1,5 +1,6 @@
 package ua.edu.sumdu.chess.javafxchess.backend;
 
+import lombok.NonNull;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +11,7 @@ public class Player {
     @Setter
     private int timeLeft;
 
-    public Player(PieceColor pieceColor) {
+    public Player(@NonNull PieceColor pieceColor) {
         this.pieceColor = pieceColor;
     }
 

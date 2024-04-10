@@ -1,5 +1,6 @@
 package ua.edu.sumdu.chess.javafxchess.backend.moves;
 
+import lombok.NonNull;
 import ua.edu.sumdu.chess.javafxchess.backend.Board;
 import ua.edu.sumdu.chess.javafxchess.backend.Direction;
 import ua.edu.sumdu.chess.javafxchess.backend.Position;
@@ -31,7 +32,7 @@ public class CastlingMove extends Move {
     }
 
     @Override
-    public boolean isLegal(Board board) {
+    public boolean isLegal(@NonNull Board board) {
         PieceColor currentColor = board.getPiece(from).getColor();
 
         if (board.isInCheck(currentColor)) {
