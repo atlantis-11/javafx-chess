@@ -16,14 +16,14 @@
                 <ToggleGroup fx:id="optionGroup" />
             </fx:define>
 
-            <RadioButton toggleGroup="$optionGroup" GridPane.columnIndex="0" GridPane.rowIndex="0" selected="true" />
-            <RadioButton toggleGroup="$optionGroup" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <RadioButton toggleGroup="$optionGroup" fx:id="twoPlayerOption" GridPane.columnIndex="0" GridPane.rowIndex="0" selected="true" />
+            <RadioButton toggleGroup="$optionGroup" fx:id="engineOption" GridPane.columnIndex="0" GridPane.rowIndex="1" />
 
             <HBox GridPane.columnIndex="1" GridPane.rowIndex="0" alignment="CENTER_LEFT" spacing="10">
                 <Text>2 Players</Text>
-                <TextField />
+                <TextField text="10" fx:id="timeMinField" />
                 <Text>min</Text>
-                <TextField />
+                <TextField text="0" fx:id="timeSecField" />
                 <Text>sec</Text>
             </HBox>
 
@@ -38,11 +38,11 @@
                     </items>
                 </ComboBox>
                 <Text>difficulty</Text>
-                <TextField />
+                <TextField text="10" fx:id="difficultyField" />
             </HBox>
 
             <VBox GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2" alignment="CENTER">
-                <Button>Play</Button>
+                <Button onMouseClicked="#handleStartClick">Play</Button>
             </VBox>
         </GridPane>
     </VBox>
