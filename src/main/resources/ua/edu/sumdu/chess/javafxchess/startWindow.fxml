@@ -29,7 +29,7 @@
 
             <HBox GridPane.columnIndex="1" GridPane.rowIndex="1" alignment="CENTER_LEFT" spacing="10">
                 <Text>vs Engine as</Text>
-                <ComboBox value="White">
+                <ComboBox fx:id="pieceColorComboBox" value="White">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="White" />

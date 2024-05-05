@@ -5,14 +5,31 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.util.Objects;
 
 public class ChessApplication extends Application {
+    @Getter
+    private static ChessApplication applicationInstance;
+
+    @Override
+    public void init() {
+        applicationInstance = this;
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         System.setProperty("prism.lcdtext", "false");
+
+        showStartWindow(primaryStage);
+    }
+
+    public void showStartWindow(Stage primaryStage) throws IOException {
+        if (primaryStage == null) {
+            primaryStage = new Stage();
+        }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("startWindow.fxml"));
         loader.setControllerFactory(c -> new StartWindowController());

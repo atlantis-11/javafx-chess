@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 public class Game {
     @Getter
     private Board board;
-    private boolean isGameInProgress = false;
+    protected boolean isGameInProgress = false;
     protected final Player playerW = new Player(PieceColor.WHITE);
     protected final Player playerB = new Player(PieceColor.BLACK);
     protected Player currentPlayer;
@@ -54,9 +54,11 @@ public class Game {
         isGameInProgress = true;
     }
 
-    protected void stop() {
-        isGameInProgress = false;
-        stopTheClock();
+    public void stop() {
+        if (isGameInProgress) {
+            isGameInProgress = false;
+            stopTheClock();
+        }
     }
 
     private void startTheClock() {

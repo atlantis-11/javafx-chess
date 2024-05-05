@@ -42,9 +42,11 @@ public class EngineGame extends Game {
     }
 
     @Override
-    protected void stop() {
-        super.stop();
-        stockfish.stop();
+    public void stop() {
+        if (isGameInProgress) {
+            super.stop();
+            stockfish.stop();
+        }
     }
 
     @Override

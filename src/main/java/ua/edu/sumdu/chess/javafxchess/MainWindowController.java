@@ -251,6 +251,13 @@ public class MainWindowController {
         game.drawByAgreement();
     }
 
+    @FXML
+    public void handleBackClick() throws IOException {
+        game.stop();
+        ChessApplication.getApplicationInstance().showStartWindow(null);
+        ((Stage) mainColumn.getScene().getWindow()).close();
+    }
+
     private void showPromotionWindow(Position toPos, MouseEvent mouseEvent) throws IOException {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("promotionWindow.fxml"));
