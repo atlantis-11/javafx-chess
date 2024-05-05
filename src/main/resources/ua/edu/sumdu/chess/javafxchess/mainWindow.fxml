@@ -19,7 +19,7 @@
                     <Insets bottom="10" />
                 </padding>
 
-                <Button styleClass="control">
+                <Button styleClass="control" onMouseClicked="#handleBackClick">
                     <graphic>
                         <HBox spacing="2">
                             <Label styleClass="chessGlyphFont">,</Label>

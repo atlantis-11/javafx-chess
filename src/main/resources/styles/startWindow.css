@@ -1,0 +1,49 @@
+.mainPane {
+    -fx-main-bg: #31302c;
+    -fx-control-bg: #484744;
+
+    -fx-font-size: 20px;
+    -fx-background-color: -fx-main-bg;
+}
+
+.mainPane * {
+    -fx-text-fill: white;
+}
+
+Text {
+    -fx-fill: white;
+}
+
+TextField {
+    -fx-background-color: -fx-control-bg;
+    -fx-alignment: CENTER;
+    -fx-max-width: 60;
+}
+
+.radio {
+    -fx-border-width: 2px;
+    -fx-border-color: white;
+    -fx-mark-color: white;
+    -fx-mark-highlight-color: transparent;
+    -fx-background-color: -fx-main-bg;
+    -fx-border-radius: 15px;
+    -fx-font-size: 10px;
+}
+
+.combo-box {
+    -fx-background-color: -fx-control-bg;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: -fx-control-bg;
+    -fx-alignment: CENTER;
+}
+
+.combo-box .arrow {
+    -fx-background-color: white;
+}
+
+Button {
+    -fx-background-color: #97c55b;
+    -fx-pref-width: 200px;
+}

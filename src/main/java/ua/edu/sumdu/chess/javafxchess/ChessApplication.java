@@ -5,33 +5,46 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import ua.edu.sumdu.chess.javafxchess.backend.Game;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.util.Objects;
 
 public class ChessApplication extends Application {
+    @Getter
+    private static ChessApplication applicationInstance;
+
+    @Override
+    public void init() {
+        applicationInstance = this;
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         System.setProperty("prism.lcdtext", "false");
 
-        int timeInSeconds = 600;
-        Game game = new Game(timeInSeconds);
+        showStartWindow(primaryStage);
+    }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("mainWindow.fxml"));
-        loader.setControllerFactory(c -> new MainWindowController(game));
+    public void showStartWindow(Stage primaryStage) throws IOException {
+        if (primaryStage == null) {
+            primaryStage = new Stage();
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("startWindow.fxml"));
+        loader.setControllerFactory(c -> new StartWindowController());
         Parent root = loader.load();
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 600, 400);
         String css = Objects.requireNonNull(getClass()
-            .getResource("/styles/mainWindow.css"))
+            .getResource("/styles/startWindow.css"))
             .toExternalForm();
         scene.getStylesheets().add(css);
 
-        primaryStage.setTitle("Chess");
+        primaryStage.setTitle("Start Menu");
         primaryStage.setScene(scene);
-        primaryStage.setMinWidth(400);
-        primaryStage.setMinHeight(450);
+        primaryStage.setMinWidth(480);
+        primaryStage.setMinHeight(250);
         primaryStage.show();
     }
 
