@@ -49,15 +49,14 @@ public class StartWindowController {
             if (timeMin >= 0 && timeSec >= 0) {
                 int timeInSeconds = timeMin * 60 + timeSec;
 
-                if (timeInSeconds > 0 && timeInSeconds <= 10 * 60 * 60) {
+                if (timeInSeconds >= 30 && timeInSeconds <= 10 * 60 * 60) {
                     return timeInSeconds;
                 }
 
-                throw new InvalidInputException("Time has to be greater than 0 seconds " +
-                    "and less than 10 hours");
+                throw new InvalidInputException("Time setting has to be in 30 seconds to 10 hours range");
             }
 
-            throw new InvalidInputException("Minutes and seconds have to be >= 0");
+            throw new InvalidInputException("Minutes and seconds have to be non negative values");
         } catch (NumberFormatException e) {
             throw new InvalidInputException("Invalid time value");
         }
