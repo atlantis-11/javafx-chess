@@ -10,6 +10,7 @@ import ua.edu.sumdu.chess.javafxchess.backend.EngineGame;
 import ua.edu.sumdu.chess.javafxchess.backend.Game;
 import ua.edu.sumdu.chess.javafxchess.backend.exceptions.InvalidInputException;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
+import ua.edu.sumdu.chess.javafxchess.services.IconManager;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -119,6 +120,7 @@ public class StartWindowController {
         scene.getStylesheets().add(css);
 
         stage.setTitle("Chess");
+        IconManager.addIcon(stage);
         stage.setScene(scene);
         stage.setMinWidth(400);
         stage.setMinHeight(450);

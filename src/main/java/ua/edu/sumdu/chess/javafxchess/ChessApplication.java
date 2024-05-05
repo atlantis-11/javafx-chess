@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Getter;
+import ua.edu.sumdu.chess.javafxchess.services.IconManager;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -42,6 +43,7 @@ public class ChessApplication extends Application {
         scene.getStylesheets().add(css);
 
         primaryStage.setTitle("Start Menu");
+        IconManager.addIcon(primaryStage);
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(480);
         primaryStage.setMinHeight(250);

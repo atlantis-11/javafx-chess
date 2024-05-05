@@ -24,6 +24,7 @@ import ua.edu.sumdu.chess.javafxchess.backend.pieces.Piece;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceType;
 import ua.edu.sumdu.chess.javafxchess.services.BoardDrawer;
+import ua.edu.sumdu.chess.javafxchess.services.IconManager;
 import ua.edu.sumdu.chess.javafxchess.services.Resizer;
 import ua.edu.sumdu.chess.javafxchess.services.SquaresInitializer;
 
@@ -274,6 +275,7 @@ public class MainWindowController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Promote to");
+        IconManager.addIcon(stage);
         stage.setResizable(false);
 
         stage.setX(mouseEvent.getScreenX());
@@ -301,6 +303,7 @@ public class MainWindowController {
 
         stage.setScene(scene);
         stage.setTitle("Game Over");
+        IconManager.addIcon(stage);
         stage.setWidth(300);
         stage.setHeight(150);
         stage.setResizable(false);
