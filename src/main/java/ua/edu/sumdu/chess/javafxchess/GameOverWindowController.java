@@ -8,9 +8,9 @@ import javafx.scene.text.Text;
  */
 public class GameOverWindowController {
     @FXML
-    public Text resultText;
+    private Text resultText;
     @FXML
-    public Text reasonText;
+    private Text reasonText;
     private final String result;
     private final String reason;
 

@@ -151,7 +151,7 @@ public class MainWindowController {
     }
 
     /** Draws or redraws the board. */
-    public void drawBoard() {
+    private void drawBoard() {
         boardDrawer.drawBoard(game.getBoard());
         resizer.updateSquaresSize(squares);
     }
@@ -171,7 +171,7 @@ public class MainWindowController {
      * @param seconds The time in seconds.
      * @return The formatted time string.
      */
-    public static String secondsToTime(int seconds) {
+    private String secondsToTime(int seconds) {
         LocalTime time = LocalTime.ofSecondOfDay(seconds);
         String pattern = seconds >= 3600 ? "H:mm:ss" : "m:ss";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
