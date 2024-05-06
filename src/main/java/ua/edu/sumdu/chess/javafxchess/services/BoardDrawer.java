@@ -14,13 +14,23 @@ import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceType;
 
 import java.util.List;
 
+/**
+ * Service class to modify currently displayed
+ * state of the chess board.
+ */
 public class BoardDrawer {
     private final StackPane[][] squares;
 
+    /**
+     * Constructs a BoardDrawer with the given squares.
+     *
+     * @param squares The squares of the chessboard.
+     */
     public BoardDrawer(StackPane[][] squares) {
         this.squares = squares;
     }
 
+    /** Draws all the pieces at their positions, highlights the last move. */
     public void drawBoard(Board board) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -35,6 +45,7 @@ public class BoardDrawer {
         highlightLastMoves(board);
     }
 
+    /** Removes all elements located on the given square. */
     private void clearSquare(StackPane square) {
         if (square.getChildren().size() > 1) {
             square.getChildren().remove(1, square.getChildren().size());
@@ -56,6 +67,7 @@ public class BoardDrawer {
         square.getChildren().add(1, highlight);
     }
 
+    /** Adds an image of the given piece to the given square. */
     private void drawPiece(StackPane square, Piece piece) {
         if (piece != null) {
             ImageView pieceImageView = new ImageView();
@@ -67,6 +79,7 @@ public class BoardDrawer {
         }
     }
 
+    /** Gets image path for the specified piece. */
     private String getPieceImagePath(Piece piece) {
         String symbol = piece.getType() == PieceType.KNIGHT
             ? "n" : piece.getType().name().substring(0, 1).toLowerCase();
@@ -87,6 +100,7 @@ public class BoardDrawer {
         }
     }
 
+    /** Creates legal move node to be added to the square. */
     private Circle createLegalMove(Move move) {
         int legalMoveRow = move.getTo().row();
         int legalMoveCol = move.getTo().col();

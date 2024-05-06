@@ -11,6 +11,9 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.CastlingMove;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a king piece in the chess game.
+ */
 public class King extends Piece {
     private static final Direction[] DIRS = {
         Direction.NORTH,
@@ -23,6 +26,7 @@ public class King extends Piece {
         Direction.NORTH_WEST
     };
 
+    /** Constructs a king piece with the specified color. */
     public King(PieceColor color) {
         super(color, PieceType.KING);
     }
@@ -37,6 +41,13 @@ public class King extends Piece {
         return moves;
     }
 
+    /**
+     * Adds regular moves (non-castling) for the king piece from the specified position.
+     *
+     * @param board The chessboard.
+     * @param from The position of the king piece.
+     * @param moves The list to which moves are added.
+     */
     private void addRegularMoves(Board board, Position from, List<Move> moves) {
         for (Direction dir : DIRS) {
             Position to = from.add(dir);
@@ -54,6 +65,13 @@ public class King extends Piece {
         }
     }
 
+    /**
+     * Adds castling moves for the king piece from the specified position.
+     *
+     * @param board The chessboard.
+     * @param from The position of the king piece.
+     * @param moves The list to which moves are added.
+     */
     private void addCastlingMoves(Board board, Position from, List<Move> moves) {
         if (hasMoved) return;
 
@@ -65,6 +83,14 @@ public class King extends Piece {
         }
     }
 
+    /**
+     * Checks if the king piece can castle in the specified direction from the given position.
+     *
+     * @param board The chessboard.
+     * @param from The position of the king piece.
+     * @param dir The direction in which to check for castling.
+     * @return True if the king can castle in the specified direction, otherwise false.
+     */
     private boolean canCastle(Board board, Position from, Direction dir) {
         int rookCol = dir == Direction.EAST ? 7 : 0;
         Position rookPos = new Position(from.row(), rookCol);

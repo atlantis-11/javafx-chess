@@ -10,6 +10,9 @@ import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceType;
 
 import java.util.function.Consumer;
 
+/**
+ * Controller class for the promotion window.
+ */
 public class PromotionWindowController {
     @FXML
     private HBox mainRow;
@@ -18,6 +21,14 @@ public class PromotionWindowController {
     private final double squareSize;
     private final Consumer<PieceType> onSelected;
 
+    /**
+     * Constructs a PromotionWindowController.
+     *
+     * @param stage      The stage for the scene.
+     * @param pieceColor The color of the piece being promoted.
+     * @param squareSize The size of the square.
+     * @param onSelected The callback to call once a piece type has been selected.
+     */
     public PromotionWindowController(Stage stage, PieceColor pieceColor,
                                      double squareSize, Consumer<PieceType> onSelected) {
         this.stage = stage;
@@ -55,6 +66,7 @@ public class PromotionWindowController {
         stage.setOnCloseRequest(e -> onSelected.accept(PieceType.QUEEN));
     }
 
+    /** Gets image path for the specified piece type. */
     private String getPieceImagePath(PieceType pieceType) {
         String symbol = pieceType == PieceType.KNIGHT
             ? "n" : pieceType.name().substring(0, 1).toLowerCase();

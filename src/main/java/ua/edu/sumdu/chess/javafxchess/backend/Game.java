@@ -12,6 +12,9 @@ import lombok.NonNull;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * Represents a chess game.
+ */
 public class Game {
     @Getter
     private Board board;
@@ -31,14 +34,23 @@ public class Game {
     private final EventEmitter<DrawEvent> drawEventEmitter
         = new EventEmitter<>();
 
+    /** Constructs a game with no time limit. */
     public Game() {
         this.timeInSeconds = 0;
     }
 
+    /**
+     * Constructs a game with a specified time limit for each player.
+     *
+     * @param timeInSeconds The time limit for each player in seconds.
+     */
     public Game(int timeInSeconds) {
         this.timeInSeconds = Math.max(timeInSeconds, 0);
     }
 
+    /**
+     * Starts the game by initializing the board and setting up players.
+     */
     public void start() {
         board = new Board();
         board.initialize();
@@ -54,6 +66,7 @@ public class Game {
         isGameInProgress = true;
     }
 
+    /** Stops the game. */
     public void stop() {
         if (isGameInProgress) {
             isGameInProgress = false;
@@ -61,6 +74,7 @@ public class Game {
         }
     }
 
+    /** Starts the game clock. */
     private void startTheClock() {
         timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -76,12 +90,19 @@ public class Game {
         }, 1000, 1000); // Run every second
     }
 
+    /** Stops the game clock. */
     private void stopTheClock() {
         if (timer != null) {
             timer.cancel();
         }
     }
 
+    /**
+     * Gets the legal moves for a piece at the specified position.
+     *
+     * @param from The position of the piece.
+     * @return A list of legal moves for the piece.
+     */
     public List<Move> getLegalMoves(@NonNull Position from) {
         if (isGameInProgress) {
             Piece piece = board.getPiece(from);
@@ -95,6 +116,13 @@ public class Game {
         return Collections.emptyList();
     }
 
+    /**
+     * Makes a move on the board.
+     *
+     * @param from The starting position of the move.
+     * @param to The target position of the move.
+     * @param promotionPieceType The type of piece to promote to, if applicable.
+     */
     public void makeMove(@NonNull Position from, @NonNull Position to,
                          PieceType promotionPieceType) {
         if (!isGameInProgress) {
@@ -119,10 +147,17 @@ public class Game {
         }
     }
 
+    /**
+     * Makes a move on the board without promotion.
+     *
+     * @param from The starting position of the move.
+     * @param to The target position of the move.
+     */
     public void makeMove(Position from, Position to) {
         makeMove(from, to, null);
     }
 
+    /** Draws the game by agreement. */
     public void drawByAgreement() {
         if (!isGameInProgress) {
             return;
@@ -131,6 +166,7 @@ public class Game {
         emitDrawEvent(DrawReason.AGREEMENT);
     }
 
+    /** Resigns the game. */
     public void resign() {
         if (!isGameInProgress) {
             return;
@@ -139,6 +175,13 @@ public class Game {
         emitWinEvent(WinReason.RESIGNATION);
     }
 
+    /**
+     * Finds a legal move by specified positions.
+     *
+     * @param from The starting position of the move.
+     * @param to The target position of the move.
+     * @return The legal move found, or null if no such move exists.
+     */
     private Move findMoveByPositions(Position from, Position to) {
         return board.getLegalMoves(from).stream()
             .filter(move -> move.getFrom().equals(from) && move.getTo().equals(to))
@@ -146,6 +189,13 @@ public class Game {
             .orElse(null);
     }
 
+    /**
+     * Checks if the move is a promotion move and sets the
+     * promotion piece type if one was passed.
+     *
+     * @param move The move to check.
+     * @param promotionPieceType The type of piece to promote to, optional.
+     */
     private void checkForPromotionMove(Move move, PieceType promotionPieceType) {
         if (promotionPieceType != null
                 && move instanceof PromotionMove) {
@@ -153,10 +203,20 @@ public class Game {
         }
     }
 
+    /**
+     * Gets opponent of the current player.
+     *
+     * @return opponent of the current player.
+     */
     private Player getOpponent() {
         return currentPlayer == playerW ? playerB : playerW;
     }
 
+    /**
+     * Checks if the game is over.
+     *
+     * @return true if game is over, false otherwise.
+     */
     private boolean checkForGameOver() {
         PieceColor opponentColor = getOpponent().getPieceColor();
 
@@ -179,6 +239,11 @@ public class Game {
         return true;
     }
 
+    /**
+     * Checks if game is drawn by threefold repetition
+     *
+     * @return true if game is drawn by threefold repetition, false otherwise.
+     */
     private boolean isThreefoldRepetition() {
         if (!board.getRepetitionFENHistory().isEmpty()) {
             String lastFEN = board.getRepetitionFENHistory().getLast();
@@ -190,6 +255,11 @@ public class Game {
         return false;
     }
 
+    /**
+     * Checks if game is drawn by insufficient material
+     *
+     * @return true if game is drawn by insufficient material, false otherwise.
+     */
     private boolean isInsufficientMaterial() {
         if (board.getPositions().size() == 2) {
             // Both Sides have a bare King
@@ -217,28 +287,34 @@ public class Game {
         return false;
     }
 
+    /** Registers a callback for move made events. */
     public void onMoveMade(@NonNull Consumer<MoveMadeEvent> c) {
         moveMadeEventEmitter.addConsumer(c);
     }
 
+    /** Registers a callback for time updated events. */
     public void onTimeUpdated(@NonNull Consumer<TimeUpdatedEvent> c) {
         timeUpdatedEventEmitter.addConsumer(c);
     }
 
+    /** Registers a callback for win events. */
     public void onWin(@NonNull Consumer<WinEvent> c) {
         winEventEmitter.addConsumer(c);
     }
 
+    /** Registers a callback for draw events. */
     public void onDraw(@NonNull Consumer<DrawEvent> c) {
         drawEventEmitter.addConsumer(c);
     }
 
+    /** Emits a move made event. */
     private void emitMoveMadeEvent() {
         moveMadeEventEmitter.trigger(
             new MoveMadeEvent(currentPlayer.getPieceColor())
         );
     }
 
+    /** Emits a time updated event. */
     private void emitTimeUpdatedEvent() {
         timeUpdatedEventEmitter.trigger(
             new TimeUpdatedEvent(
@@ -248,6 +324,7 @@ public class Game {
         );
     }
 
+    /** Emits a win event with the specified reason. */
     private void emitWinEvent(WinReason reason) {
         stop();
         PieceColor winnerColor = switch (reason) {
@@ -257,6 +334,7 @@ public class Game {
         winEventEmitter.trigger(new WinEvent(reason, winnerColor));
     }
 
+    /** Emits a draw event with the specified reason. */
     private void emitDrawEvent(DrawReason reason) {
         stop();
         drawEventEmitter.trigger(new DrawEvent(reason));

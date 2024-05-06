@@ -11,7 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a knight piece in the chess game.
+ */
 public class Knight extends Piece {
+    /** Constructs a knight piece with the specified color. */
     public Knight(PieceColor color) {
         super(color, PieceType.KNIGHT);
     }
@@ -28,6 +32,13 @@ public class Knight extends Piece {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Gets the possible positions for the knight to go to
+     * from the specified position.
+     *
+     * @param from The position of the knight piece.
+     * @return A list of possible to positions for the knight.
+     */
     private List<Position> getPossibleToPositions(Position from) {
         List<Position> toPositions = new ArrayList<>();
 
@@ -41,6 +52,13 @@ public class Knight extends Piece {
         return toPositions;
     }
 
+    /**
+     * Filters the possible to positions based on board boundaries and piece color.
+     *
+     * @param board The chessboard.
+     * @param toPositions The list of possible to positions.
+     * @return A list of filtered to positions for the knight.
+     */
     private List<Position> getFilteredToPositions(Board board,
                                                   List<Position> toPositions) {
         return toPositions.stream()

@@ -7,7 +7,12 @@ import ua.edu.sumdu.chess.javafxchess.backend.Position;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.Piece;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
 
+/**
+ * Represents a castling move in the chess game.
+ */
 public class CastlingMove extends Move {
+    /** Constructs a castling move with the
+     * specified 'from' and 'to' positions. */
     public CastlingMove(Position from, Position to) {
         super(from, to);
     }
@@ -54,6 +59,7 @@ public class CastlingMove extends Move {
         return !copiedBoard.isInCheck(currentColor);
     }
 
+    /** Gets the direction of the castling move */
     private Direction getCastlingDir() {
         return (to.col() - from.col()) > 0
             ? Direction.EAST

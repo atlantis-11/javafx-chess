@@ -36,6 +36,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Controller class for the main window of the chess application.
+ */
 public class MainWindowController {
     @FXML
     private BorderPane mainPane;
@@ -61,11 +64,19 @@ public class MainWindowController {
     private BoardDrawer boardDrawer;
     private Resizer resizer;
 
+    /**
+     * Constructs a MainWindowController with the given game instance.
+     *
+     * @param game The game instance.
+     */
     public MainWindowController(Game game) {
         this.game = game;
         setupGameEventsHandlers();
     }
 
+    /**
+     * Initializes the main window controller.
+     */
     @FXML
     public void initialize() {
         squares = SquaresInitializer.initializeSquares(boardGridPane);
@@ -95,6 +106,7 @@ public class MainWindowController {
         });
     }
 
+    /** Sets up event handlers for the game instance. */
     private void setupGameEventsHandlers() {
         game.onMoveMade(this::handleMoveMadeEvent);
 
@@ -129,6 +141,7 @@ public class MainWindowController {
         }
     }
 
+    /** Updates the 'disable' parameter of the clocks. */
     private void handleMoveMadeEvent(MoveMadeEvent e) {
         drawBoard();
 
@@ -137,11 +150,13 @@ public class MainWindowController {
         timerBlack.setDisable(!isWhite);
     }
 
+    /** Draws or redraws the board. */
     public void drawBoard() {
         boardDrawer.drawBoard(game.getBoard());
         resizer.updateSquaresSize(squares);
     }
 
+    /** Updates the clocks. */
     private void handleTimeUpdatedEvent(TimeUpdatedEvent e) {
         Button currentTimer = e.getCurrentColor().equals(PieceColor.WHITE)
             ? timerWhite
@@ -150,6 +165,12 @@ public class MainWindowController {
         currentTimer.setText(secondsToTime(e.getTimeLeft()));
     }
 
+    /**
+     * Converts seconds to formatted time.
+     *
+     * @param seconds The time in seconds.
+     * @return The formatted time string.
+     */
     public static String secondsToTime(int seconds) {
         LocalTime time = LocalTime.ofSecondOfDay(seconds);
         String pattern = seconds >= 3600 ? "H:mm:ss" : "m:ss";
@@ -158,6 +179,7 @@ public class MainWindowController {
         return time.format(formatter);
     }
 
+    /** Handles click on the square. */
     @FXML
     public void handleSquareClick(MouseEvent mouseEvent) throws IOException {
         Position toPos = getPositionFromMouseEvent(mouseEvent);
@@ -194,6 +216,7 @@ public class MainWindowController {
         }
     }
 
+    /** Gets position on the board from the mouse event coordinates. */
     private Position getPositionFromMouseEvent(MouseEvent event) {
         int row = (int) (event.getY() / (boardGridPane.getHeight() / 8));
         int col = (int) (event.getX() / (boardGridPane.getWidth() / 8));
@@ -201,6 +224,7 @@ public class MainWindowController {
         return new Position(row, col);
     }
 
+    /** Handles piece selection, shows legal moves, if any. */
     private void handleSelection(Position pos) {
         currentLegalMoves = new ArrayList<>(game.getLegalMoves(pos));
 
@@ -224,18 +248,21 @@ public class MainWindowController {
             .toList());
     }
 
+    /** Sends move to the game instance. */
     private void handleMove(Position toPos) {
         game.makeMove(selectedPos, toPos);
         selectedPos = null;
         currentLegalMoves.clear();
     }
 
+    /** Sends promotion move to the game instance. */
     private void handlePromotionMove(Position toPos, PieceType promotionPieceType) {
         game.makeMove(selectedPos, toPos, promotionPieceType);
         selectedPos = null;
         currentLegalMoves.clear();
     }
 
+    /** Deselects the currently selected piece. */
     private void clearSelection() {
         selectedPos = null;
         currentLegalMoves.clear();
@@ -259,6 +286,7 @@ public class MainWindowController {
         ((Stage) mainColumn.getScene().getWindow()).close();
     }
 
+    /** Shows window where player can choose a piece to promote to. */
     private void showPromotionWindow(Position toPos, MouseEvent mouseEvent) throws IOException {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("promotionWindow.fxml"));

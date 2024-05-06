@@ -8,6 +8,9 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 
 import java.util.List;
 
+/**
+ * Represents a rook piece in the chess game.
+ */
 public class Rook extends Piece {
     private static final Direction[] DIRS = {
         Direction.NORTH,
@@ -16,6 +19,7 @@ public class Rook extends Piece {
         Direction.WEST
     };
 
+    /** Constructs a rook piece with the specified color. */
     public Rook(PieceColor color) {
         super(color, PieceType.ROOK);
     }

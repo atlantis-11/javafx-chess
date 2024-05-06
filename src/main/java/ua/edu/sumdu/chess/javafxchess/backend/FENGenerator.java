@@ -6,13 +6,26 @@ import ua.edu.sumdu.chess.javafxchess.backend.pieces.Piece;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceType;
 
+/**
+ * Generates FEN strings for the current state of a chess board.
+ */
 public class FENGenerator {
     private final Board board;
 
+    /**
+     * Constructs a FENGenerator for the specified chess board.
+     *
+     * @param board The chess board.
+     */
     public FENGenerator(@NonNull Board board) {
         this.board = board;
     }
 
+    /**
+     * Generates the FEN string for the current state of the board.
+     *
+     * @return The FEN string.
+     */
     public String getFEN() {
         return getPiecePlacement() + ' '
             + getSideToMove() + ' '
@@ -22,6 +35,7 @@ public class FENGenerator {
             + board.getFullmoveCounter();
     }
 
+    /** Generates the piece placement part of the FEN string. */
     private String getPiecePlacement() {
         StringBuilder fen = new StringBuilder();
         int emptySquares = 0;
@@ -54,6 +68,7 @@ public class FENGenerator {
         return fen.toString();
     }
 
+    /** Gets the symbol representing a piece at a specific position. */
     private String getPieceSymbol(int row, int col) {
         Piece piece = board.getPiece(row, col);
 
@@ -69,6 +84,7 @@ public class FENGenerator {
             : symbol;
     }
 
+    /** Determines the side to move in the FEN string. */
     private char getSideToMove() {
         if (board.getLastMove() != null
             && board.getPiece(board.getLastMove().getTo())
@@ -79,6 +95,7 @@ public class FENGenerator {
         }
     }
 
+    /** Gets the castling ability part of the FEN string. */
     private String getCastlingAbility() {
         String castlingAbility = getCastlingAbility(PieceColor.WHITE)
             + getCastlingAbility(PieceColor.BLACK);
@@ -88,6 +105,7 @@ public class FENGenerator {
             : castlingAbility;
     }
 
+    /** Gets the castling ability for a specific color. */
     private String getCastlingAbility(PieceColor color) {
         StringBuilder castlingAbility = new StringBuilder();
         boolean isWhite = color == PieceColor.WHITE;
@@ -107,11 +125,13 @@ public class FENGenerator {
             : castlingAbility.toString();
     }
 
+    /** Checks if a piece has moved from its starting position. */
     private boolean pieceHasNotMoved(int row, int col) {
         Piece piece = board.getPiece(row, col);
         return piece != null && !piece.isHasMoved();
     }
 
+    /** Gets the en passant target square part of the FEN string. */
     private String getEnPassantTargetSquare() {
         Move lastMove = board.getLastMove();
 

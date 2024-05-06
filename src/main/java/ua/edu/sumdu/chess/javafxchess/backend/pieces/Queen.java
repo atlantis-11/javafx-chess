@@ -8,6 +8,9 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 
 import java.util.List;
 
+/**
+ * Represents a queen piece in the chess game.
+ */
 public class Queen extends Piece {
     private static final Direction[] DIRS = {
         Direction.NORTH,
@@ -20,6 +23,7 @@ public class Queen extends Piece {
         Direction.NORTH_WEST
     };
 
+    /** Constructs a queen piece with the specified color. */
     public Queen(PieceColor color) {
         super(color, PieceType.QUEEN);
     }

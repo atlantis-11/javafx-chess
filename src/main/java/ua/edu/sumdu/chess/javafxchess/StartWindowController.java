@@ -8,13 +8,16 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import ua.edu.sumdu.chess.javafxchess.backend.EngineGame;
 import ua.edu.sumdu.chess.javafxchess.backend.Game;
-import ua.edu.sumdu.chess.javafxchess.backend.exceptions.InvalidInputException;
+import ua.edu.sumdu.chess.javafxchess.exceptions.InvalidInputException;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.PieceColor;
 import ua.edu.sumdu.chess.javafxchess.services.IconManager;
 
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Controller class for the start window of the chess application.
+ */
 public class StartWindowController {
     @FXML
     private ToggleGroup optionGroup;
@@ -27,6 +30,9 @@ public class StartWindowController {
     @FXML
     public ComboBox<String> pieceColorComboBox;
 
+    /**
+     * Handles the click event when the start button is clicked.
+     */
     @FXML
     public void handleStartClick() throws IOException {
         RadioButton rb = (RadioButton) optionGroup.getSelectedToggle();
@@ -42,6 +48,12 @@ public class StartWindowController {
         }
     }
 
+    /**
+     * Gets the total game time in seconds.
+     *
+     * @return The total game time in seconds.
+     * @throws InvalidInputException If time input is invalid.
+     */
     private int getTimeInSeconds() {
         try {
             int timeMin = parseInt(timeMinField.getText());
@@ -63,6 +75,12 @@ public class StartWindowController {
         }
     }
 
+    /**
+     * Gets the difficulty level for engine games.
+     *
+     * @return The difficulty level for engine games.
+     * @throws InvalidInputException If difficulty input is invalid.
+     */
     private int getDifficulty() {
         try {
             int difficulty = parseInt(difficultyField.getText());
@@ -77,6 +95,7 @@ public class StartWindowController {
         }
     }
 
+    /** Gets the selected piece color for engine games. */
     private PieceColor getPieceColor() {
         return PieceColor.valueOf(
             pieceColorComboBox.getSelectionModel().getSelectedItem()
@@ -89,16 +108,32 @@ public class StartWindowController {
         return !str.isEmpty() ? Integer.parseInt(str) : 0;
     }
 
+    /**
+     * Starts a two-player game.
+     *
+     * @param timeInSeconds The total game time in seconds.
+     */
     private void startTwoPlayerGame(int timeInSeconds) throws IOException {
         Game game = new Game(timeInSeconds);
         showMainWindow(game);
     }
 
+    /**
+     * Starts an engine game.
+     *
+     * @param pieceColor The selected piece color.
+     * @param difficulty The difficulty level.
+     */
     private void startEngineGame(PieceColor pieceColor, int difficulty) throws IOException {
         Game game = new EngineGame(pieceColor, difficulty);
         showMainWindow(game);
     }
 
+    /**
+     * Shows a validation error message.
+     *
+     * @param message The error message to display.
+     */
     private void showValidationError(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setHeaderText("Validation error");
@@ -106,6 +141,11 @@ public class StartWindowController {
         alert.showAndWait();
     }
 
+    /**
+     * Shows the main window of the game and closes the current window.
+     *
+     * @param game The game instance to use.
+     */
     private void showMainWindow(Game game) throws IOException {
         Stage stage = new Stage();
 

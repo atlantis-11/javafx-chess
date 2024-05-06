@@ -8,6 +8,9 @@ import ua.edu.sumdu.chess.javafxchess.backend.moves.Move;
 
 import java.util.List;
 
+/**
+ * Represents a bishop piece in the chess game.
+ */
 public class Bishop extends Piece {
     private static final Direction[] DIRS = {
         Direction.NORTH_EAST,
@@ -16,6 +19,7 @@ public class Bishop extends Piece {
         Direction.NORTH_WEST
     };
 
+    /** Constructs a bishop piece with the specified color. */
     public Bishop(PieceColor color) {
         super(color, PieceType.BISHOP);
     }

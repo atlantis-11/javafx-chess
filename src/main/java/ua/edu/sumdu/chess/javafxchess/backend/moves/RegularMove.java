@@ -4,7 +4,12 @@ import ua.edu.sumdu.chess.javafxchess.backend.Board;
 import ua.edu.sumdu.chess.javafxchess.backend.Position;
 import ua.edu.sumdu.chess.javafxchess.backend.pieces.Piece;
 
+/**
+ * Represents a regular move in the chess game.
+ */
 public class RegularMove extends Move {
+    /** Constructs a regular move with the
+     * specified 'from' and 'to' positions. */
     public RegularMove(Position from, Position to) {
         super(from, to);
     }

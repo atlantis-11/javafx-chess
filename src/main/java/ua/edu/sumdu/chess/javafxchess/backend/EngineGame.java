@@ -12,12 +12,21 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Extends the base game functionality to include engine-driven gameplay.
+ */
 public class EngineGame extends Game {
     private final Player humanPlayer;
     private final Stockfish stockfish;
     private final EventEmitter<StockfishErrorEvent> stockfishErrorEventEmitter
         = new EventEmitter<>();
 
+    /**
+     * Constructs an EngineGame with the specified parameters.
+     *
+     * @param humanPlayerPieceColor The color of the human player's pieces.
+     * @param engineSkillLevel The skill level of the Stockfish engine.
+     */
     public EngineGame(@NonNull PieceColor humanPlayerPieceColor,
                       int engineSkillLevel) {
         humanPlayer = humanPlayerPieceColor == PieceColor.WHITE
@@ -26,6 +35,9 @@ public class EngineGame extends Game {
         stockfish = new Stockfish(engineSkillLevel);
     }
 
+    /**
+     * Starts the game, initializing the board and starting the Stockfish engine.
+     */
     @Override
     public void start() {
         super.start();
@@ -41,6 +53,9 @@ public class EngineGame extends Game {
         }
     }
 
+    /**
+     * Stops the game and shuts down the Stockfish engine.
+     */
     @Override
     public void stop() {
         if (isGameInProgress) {
@@ -70,6 +85,10 @@ public class EngineGame extends Game {
         }
     }
 
+    /**
+     * Overrides the drawByAgreement method to do nothing,
+     * as draw agreements are not applicable in engine games.
+     */
     @Override
     public void drawByAgreement() { }
 
@@ -79,6 +98,7 @@ public class EngineGame extends Game {
         super.resign();
     }
 
+    /** Gets move from Stockfish and makes it. */
     private void makeEngineMove() {
         stockfish.getBestMove(getBoard().getFEN())
             .thenAccept(strMove -> {
@@ -94,6 +114,7 @@ public class EngineGame extends Game {
             });
     }
 
+    /** Converts Stockfish string coordinate to Position */
     private Position stockfishCoordToPosition(String coord) {
         return new Position(
             '8' - coord.charAt(1),
@@ -101,6 +122,12 @@ public class EngineGame extends Game {
         );
     }
 
+    /**
+     * Determines the promotion piece type for a given Stockfish move string.
+     *
+     * @param strMove The Stockfish move string.
+     * @return The promotion piece type, or null if no promotion.
+     */
     private PieceType getStockfishPromotionPieceType(String strMove) {
         if (strMove.length() == 5) {
             return switch (strMove.charAt(4)) {
@@ -114,14 +141,17 @@ public class EngineGame extends Game {
         return null;
     }
 
+    /** Checks if it is human player's turn */
     private boolean isHumanCurrentPlayer() {
         return humanPlayer.equals(currentPlayer);
     }
 
+    /** Registers a callback for Stockfish error events. */
     public void onStockfishErrorEvent(Consumer<StockfishErrorEvent> c) {
         stockfishErrorEventEmitter.addConsumer(c);
     }
 
+    /** Emits a Stockfish error event. */
     private void emitStockfishErrorEvent() {
         stop();
         stockfishErrorEventEmitter.trigger(new StockfishErrorEvent());
